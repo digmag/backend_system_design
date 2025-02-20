@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: USERS_SERVICE_DB
+    ports:
+      - "15432:5432"
+    networks:
+      - my-network

@@ -65,4 +65,23 @@ public class SecurityConfig {
                 );
         return finalize(http);
     }
+    private RequestMatcher filterPredicate(String rootPath, String... ignore) {
+        // Условие, что
+        // 1. Путь сервлета задан
+        // 2. Путь сервлета соответствует требуемому паттерну (начинается с rootPath)
+        // 3. Путь сервлета не соответствует паттерну игнорируемых путей
+        return rq -> Objects.nonNull(rq.getServletPath())
+                && rq.getServletPath().startsWith(rootPath)
+                && Arrays.stream(ignore).noneMatch(item ->rq.getServletPath().startsWith(item));
+    }
+    @SneakyThrows
+    @Bean
+    public SecurityFilterChain filterChainIntegration(HttpSecurity http) {
+        http = http.securityMatcher(filterPredicate(securityProps.getIntegrations().getRootPath()))
+                .addFilterBefore(
+                        new IntegrationAuthenticationFilter(securityProps.getIntegrations().getApiKey()),
+                        UsernamePasswordAuthenticationFilter.class
+                );
+        return finalize(http);
+    }
 }

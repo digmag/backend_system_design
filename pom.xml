@@ -24,6 +24,7 @@
 	<modules>
 		<module>common</module>
 		<module>core</module>
+		<module>user</module>
 	</modules>
 	<scm>
 		<connection/>
@@ -38,6 +39,7 @@
 		<liquibase.version>4.26.0</liquibase.version>
 		<jwt.version>0.11.5</jwt.version>
 		<postgres.version>42.7.0</postgres.version>
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
