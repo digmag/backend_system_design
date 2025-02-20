@@ -12,3 +12,9 @@ services:
       - "15432:5432"
     networks:
       - my-network
+
+volumes:
+  db_data:
+networks:
+  my-network:
+    driver: bridge
