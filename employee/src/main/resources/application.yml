@@ -1,8 +1,8 @@
 spring:
   application:
-    name: user-application
+    name: employee-application
   liquibase:
-    enabled: true
+    enabled: false
   datasource:
     url: jdbc:postgresql://185.103.70.190:15432/USERS_SERVICE_DB
     username: admin
@@ -10,9 +10,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
 server:
-  port: 8081
+  port: 8082
 
 spring.config.import: classpath:/security-config.yml
