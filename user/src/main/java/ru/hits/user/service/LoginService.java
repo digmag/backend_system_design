@@ -10,7 +10,9 @@ import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.security.SecurityConfig;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.props.SecurityProps;
+import ru.hits.user.repository.entity.TokenEntity;
 import ru.hits.user.repository.entity.UserEntity;
+import ru.hits.user.repository.jpa.TokenRepository;
 import ru.hits.user.repository.jpa.UserRepository;
 import ru.hits.user.service.interfaces.ILoginService;
 
@@ -26,6 +28,7 @@ import static java.lang.System.currentTimeMillis;
 @RequiredArgsConstructor
 public class LoginService implements ILoginService {
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final SecurityProps securityProps;
     private final SecurityConfig securityConfig;
     private String generateAccess(UserEntity user){
@@ -47,6 +50,14 @@ public class LoginService implements ILoginService {
         if(user == null || !securityConfig.bCryptPasswordEncoder().matches(userLoginDTO.getPassword(), user.getPassword())){
             throw new BadRequestException("Пользователь с токим email не найден");
         }
-        return new TokensPair(UUID.randomUUID().toString(),generateAccess(user));
+        TokensPair tokensPair = new TokensPair(UUID.randomUUID().toString(),generateAccess(user));
+        TokenEntity token = new TokenEntity(
+                UUID.randomUUID(),
+                tokensPair.getAccessToken(),
+                tokensPair.getRefreshToken(),
+                user.getId()
+                );
+        tokenRepository.save(token);
+        return tokensPair;
     }
 }
