@@ -6,5 +6,5 @@ import ru.hits.common.dtos.user.UserRegistrationDTO;
 
 @Service
 public interface IRegistrationService {
-    TokensPair registration(UserRegistrationDTO userRegistrationDTO);
+    String registration(UserRegistrationDTO userRegistrationDTO);
 }

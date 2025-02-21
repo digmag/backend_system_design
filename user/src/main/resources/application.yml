@@ -4,7 +4,7 @@ spring:
   liquibase:
     enabled: true
   datasource:
-    url: jdbc:postgresql://185.103.70.190:15432/USERS_SERVICE_DB
+    url: jdbc:postgresql://185.103.70.190:15432/users_service_db
     username: admin
     password: root
     driver-class-name: org.postgresql.Driver

@@ -7,14 +7,13 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: USERS_SERVICE_DB
     ports:
       - "15432:5432"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - my-network
 
-volumes:
-  db_data:
 networks:
   my-network:
     driver: bridge

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hits.common.dtos.token.TokensPair;
+import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
 import ru.hits.user.service.LoginService;
 import ru.hits.user.service.interfaces.IRegistrationService;
@@ -18,7 +19,12 @@ public class AuthorizationController {
     private final LoginService loginService;
 
     @PostMapping("/registration")
-    public TokensPair registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+    public String registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
         return registrationService.registration(userRegistrationDTO);
+    }
+
+    @PostMapping("/login")
+    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
+        return loginService.login(userLoginDTO);
     }
 }

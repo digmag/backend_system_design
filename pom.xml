@@ -26,6 +26,7 @@
 		<module>core</module>
 		<module>user</module>
         <module>employee</module>
+        <module>gateway</module>
     </modules>
 	<scm>
 		<connection/>

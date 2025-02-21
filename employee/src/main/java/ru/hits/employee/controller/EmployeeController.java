@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hits.common.dtos.token.TokensPair;
+import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
 import ru.hits.employee.feignClient.UserClient;
 
@@ -17,7 +18,12 @@ public class EmployeeController {
     @Autowired
     private final UserClient userClient;
     @PostMapping("/client/registration")
-    public TokensPair registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+    public String registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
         return userClient.registration(userRegistrationDTO);
+    }
+
+    @PostMapping("/client/login")
+    public String login(@RequestBody UserLoginDTO userLoginDTO){
+        return userClient.login(userLoginDTO);
     }
 }
