@@ -1,5 +1,6 @@
 package ru.hits.user.repository.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class UserEntity {
     @Id
     private UUID id;
+    @Column(name = "email")
     private String email;
     private String password;
     private Status status;
