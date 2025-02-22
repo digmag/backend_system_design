@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: gateway-build
+    environment:
+      - GATEWAY_EMPLOYEE_URI=http://employee:8082/
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+
+  user:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: user-build
+    depends_on:
+      - postgres_db
+    environment:
+      - SPRING_DATASOURSE_URL=jdbc:postgresql://postgres_db/users_service_db
+    expose:
+      - "8081"
+    networks:
+      - my-network
+
+  employee:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: employee-build
+    depends_on:
+      - postgres_db
+    environment:
+      - USER_SERVICE_URL=http://user:8081/
+      - SPRING_DATASOURSE_URL=jdbc:postgresql://postgres_db/users_service_db
+    expose:
+      - "8082"
+    networks:
+      - my-network
+
+
+networks:
+  my-network:
+    driver: bridge

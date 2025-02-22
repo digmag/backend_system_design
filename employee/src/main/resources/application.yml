@@ -1,16 +1,16 @@
 spring:
   application:
-    name: core-application
+    name: employee-application
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:15432/AET_HITS
+    url: jdbc:postgresql://185.103.70.190:15432/users_service_db
     username: admin
     password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
-  port: 8083
+  port: 8082
 
 spring.config.import: classpath:/security-config.yml

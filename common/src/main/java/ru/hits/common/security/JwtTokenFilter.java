@@ -50,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;
         }
-        var authentication = new JwtAuthoentication(userData);
+        var authentication = new JwtAuthentication(userData);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }

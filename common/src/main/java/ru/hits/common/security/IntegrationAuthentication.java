@@ -2,13 +2,12 @@ package ru.hits.common.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-public class JwtAuthoentication extends AbstractAuthenticationToken {
-
-    public JwtAuthoentication(JwtUserData jwtUserData){
+public class IntegrationAuthentication extends AbstractAuthenticationToken {
+    public IntegrationAuthentication() {
         super(null);
-        this.setDetails(jwtUserData);
         setAuthenticated(true);
     }
+
     @Override
     public Object getCredentials() {
         return null;
@@ -16,6 +15,7 @@ public class JwtAuthoentication extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return getDetails();
+        return null;
     }
+
 }

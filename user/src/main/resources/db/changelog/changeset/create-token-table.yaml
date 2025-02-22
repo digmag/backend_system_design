@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-token
+      author: Dmitry Slabukhin
+      changes:
+        - createTable:
+            tableName: tokens
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: access
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: refresh
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: tokens
+            baseColumnNames: [ user_id ]
+            referencedTableName: users
+            referencedColumnNames: [ id ]
+            constraintName: FK_users_token

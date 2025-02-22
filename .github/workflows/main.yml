@@ -1,0 +1,25 @@
+name: Build and Run Docker Compose
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  pull_request:
+    branches:
+      - 'release/**'
+
+jobs:
+  build-run:
+    runs-on: starbly-server
+    steps:
+      - name: Checkout репозитория
+        uses: actions/checkout@v4
+
+      - name: Остановка контейнеров перед билдом (если нужно)
+        run: docker-compose down || true
+
+      - name: Пересборка сервисов, кроме БД
+        run: docker-compose up --build -d employee user gateway
+
+      - name: Проверка запущенных контейнеров
+        run: docker ps -a

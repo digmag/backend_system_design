@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: employee-application
+          uri: ${GATEWAY_EMPLOYEE_URI:http://localhost:8082/}
+          predicates:
+            - Path=/api/employee/**
