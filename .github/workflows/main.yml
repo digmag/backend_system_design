@@ -12,6 +12,9 @@ jobs:
   build-run:
     runs-on: self-hosted
     steps:
+      - name: Проверка доступа к докер
+        run: docker-compose ps
+
       - name: Checkout репозитория
         uses: actions/checkout@v4
 
