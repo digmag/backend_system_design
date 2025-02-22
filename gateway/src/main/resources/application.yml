@@ -8,6 +8,6 @@ spring:
     gateway:
       routes:
         - id: employee-application
-          uri: http://localhost:8082/
+          uri: ${GATEWAY_EMPLOYEE_URI:http://localhost:8082/}
           predicates:
             - Path=/api/employee/**

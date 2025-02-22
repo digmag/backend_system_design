@@ -8,11 +8,11 @@ import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
 
-@FeignClient(name="user-client",url = "http://localhost:8081")
+@FeignClient(name="user-client",url = "${USER_SERVICE_URL:http://localhost:8081}")
 public interface UserClient {
     @PostMapping("/integration/account/registration")
     String registration(@RequestBody UserRegistrationDTO userRegistrationDTO);
 
     @PostMapping("/integration/account/login")
-    String login(@RequestBody UserLoginDTO userLoginDTO);
+    TokensPair login(@RequestBody UserLoginDTO userLoginDTO);
 }

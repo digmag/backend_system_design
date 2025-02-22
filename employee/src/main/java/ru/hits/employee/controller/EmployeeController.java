@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/client/login")
-    public String login(@RequestBody UserLoginDTO userLoginDTO){
+    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
         return userClient.login(userLoginDTO);
     }
 }
