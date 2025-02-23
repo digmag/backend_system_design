@@ -45,4 +45,10 @@ public class UserService implements IUserService {
         var admin = userRepository.findById(userData.getId()).orElse(null);
         return admin != null || admin.getStatus() == Status.EMPLOYEE;
     }
+
+    @Override
+    public Boolean isUserExists(UUID id) {
+        var user = userRepository.findById(id).orElse(null);
+        return user!=null;
+    }
 }
