@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
+import ru.hits.common.dtos.user.UserRegistrationResponse;
 import ru.hits.common.dtos.user.UserResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.ForbiddenException;
@@ -22,7 +23,7 @@ public class EmployeeController {
     @Autowired
     private final UserClient userClient;
     @PostMapping("/client/registration")
-    public String registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+    public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
         return userClient.registration(userRegistrationDTO);
     }
 
