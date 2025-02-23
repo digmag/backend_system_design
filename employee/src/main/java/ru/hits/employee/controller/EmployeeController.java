@@ -35,7 +35,7 @@ public class EmployeeController {
     public List<UserResponseDTO> users(Authentication authentication){
         JwtUserData userData = (JwtUserData) authentication.getPrincipal();
         var isAdmin = userClient.isAdmin(userData);
-        if(isAdmin == null || !isAdmin){
+        if(!isAdmin){
             throw new ForbiddenException("Пользователь не может реализовать этот запрос");
         }
         return userClient.users();
@@ -45,7 +45,7 @@ public class EmployeeController {
     public UserResponseDTO getOne(@PathVariable UUID id, Authentication authentication){
         JwtUserData userData = (JwtUserData) authentication.getPrincipal();
         var isAdmin = userClient.isAdmin(userData);
-        if(isAdmin == null || !isAdmin){
+        if(!isAdmin){
             throw new ForbiddenException("Пользователь не может реализовать этот запрос");
         }
         return userClient.getOne(id);

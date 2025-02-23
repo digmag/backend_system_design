@@ -43,7 +43,7 @@ public class UserService implements IUserService {
     @Override
     public Boolean userIsAdmin(JwtUserData userData) {
         var admin = userRepository.findById(userData.getId()).orElse(null);
-        return admin != null || admin.getStatus() == Status.EMPLOYEE;
+        return admin != null && admin.getStatus() == Status.EMPLOYEE;
     }
 
     @Override

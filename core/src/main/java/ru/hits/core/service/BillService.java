@@ -28,6 +28,8 @@ public class BillService implements IBillService {
     @Override
     public BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication) {
         JwtUserData user = (JwtUserData) authentication.getPrincipal();
+        var userccc = userClient.isUserExists(user.getId());
+        var usercca = userClient.isAdmin(user);
         if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
             throw new BadRequestException("Пользователь не может создать счет");
         }

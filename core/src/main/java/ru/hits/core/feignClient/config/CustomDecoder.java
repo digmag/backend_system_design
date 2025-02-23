@@ -14,9 +14,9 @@ public class CustomDecoder implements ErrorDecoder {
         System.out.println(responseBody);
         switch (response.status()){
             case 400:
-                return new BadRequestException(((RuntimeException) responseBody).getMessage());
+                return new BadRequestException("ошибка 404");
             case 403:
-                return new ForbiddenException(responseBody.toString());
+                return new ForbiddenException("Ошибка 403");
             default:
                 break;
         }
