@@ -22,8 +22,8 @@ jobs:
       - name: Остановка контейнеров перед билдом (если нужно)
         run: docker-compose down || true
 
-      - name: Пересборка сервисов, кроме БД
-        run: docker-compose up --build -d employee user gateway
+      - name: Пересборка сервисов
+        run: docker-compose up --build -d
 
       - name: Проверка запущенных контейнеров
         run: docker ps -a
