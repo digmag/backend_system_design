@@ -42,6 +42,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: core-build
+    environment:
+      - USER_SERVICE_URL=http://user:8081/
     expose:
       - "8083"
     networks:
