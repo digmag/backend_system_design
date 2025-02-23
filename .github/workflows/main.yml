@@ -27,3 +27,9 @@ jobs:
 
       - name: Проверка запущенных контейнеров
         run: docker ps -a
+
+      - name: Оповещение об успехе деплоя
+        run: |
+          curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -d "text=🚀 Новая версия уже на сервере скорее проверяй!!!"
