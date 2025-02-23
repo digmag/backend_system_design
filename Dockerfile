@@ -23,3 +23,8 @@ FROM maven:3.8.4-openjdk-17-slim AS gateway-build
 WORKDIR /app
 COPY --from=build /build/gateway/target/gateway-0.0.1-SNAPSHOT.jar /app/gateway/target/
 ENTRYPOINT ["java", "-jar", "/app/gateway/target/gateway-0.0.1-SNAPSHOT.jar"]
+
+FROM maven:3.8.4-openjdk-17-slim AS core-build
+WORKDIR /app
+COPY --from=build /build/core/target/core-0.0.1-SNAPSHOT.jar /app/core/target/
+ENTRYPOINT ["java", "-jar", "/app/core/target/core-0.0.1-SNAPSHOT.jar"]

@@ -34,4 +34,9 @@ public class UserInformationcontroller {
     public Boolean isAdmin(@RequestBody JwtUserData userData){
         return userService.userIsAdmin(userData);
     }
+
+    @GetMapping("/isexists/{id}")
+    public Boolean isUserExists(@PathVariable UUID id){
+        return userService.isUserExists(id);
+    }
 }

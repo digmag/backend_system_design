@@ -1,4 +1,4 @@
-package ru.hits.employee.feignClient.config;
+package ru.hits.core.feignClient.config;
 
 
 import feign.Response;
