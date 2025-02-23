@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
+import ru.hits.common.dtos.user.UserRegistrationResponse;
 import ru.hits.user.service.LoginService;
 import ru.hits.user.service.interfaces.IRegistrationService;
 
@@ -19,7 +20,7 @@ public class AuthorizationController {
     private final LoginService loginService;
 
     @PostMapping("/registration")
-    public String registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+    public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
         return registrationService.registration(userRegistrationDTO);
     }
 

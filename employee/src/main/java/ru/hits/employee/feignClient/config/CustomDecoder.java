@@ -11,12 +11,11 @@ public class CustomDecoder implements ErrorDecoder {
     public Exception decode(String s, Response response) {
         String requestUrl = response.request().url();
         Response.Body responseBody = response.body();
-        System.out.println(responseBody);
         switch (response.status()){
             case 400:
-                return new BadRequestException(((RuntimeException) responseBody).getMessage());
+                throw new BadRequestException("Ошибка 404");
             case 403:
-                return new ForbiddenException(responseBody.toString());
+                throw new ForbiddenException("Ошибка 404");
             default:
                 break;
         }
