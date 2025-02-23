@@ -14,4 +14,6 @@ public interface IUserService {
     UserResponseDTO getOne(UUID id);
 
     Boolean userIsAdmin(JwtUserData userData);
+
+    Boolean isUserExists(UUID id);
 }
