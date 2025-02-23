@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @FeignClient(name="user-client",url = "${USER_SERVICE_URL:http://localhost:8081}")
 public interface UserClient {
-    @GetMapping("/integration/information/exists/{id}")
+    @GetMapping("/integration/information/isexists/{id}")
     Boolean isUserExists(@PathVariable UUID id);
 
     @PostMapping("/integration/information/isadmin")
