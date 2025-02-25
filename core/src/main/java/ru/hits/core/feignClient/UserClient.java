@@ -21,4 +21,7 @@ public interface UserClient {
 
     @PostMapping("/integration/information/isadmin")
     Boolean isAdmin(@RequestBody JwtUserData userData);
+
+    @GetMapping("/integration/information/users/{id}")
+    UserResponseDTO getUser(@PathVariable UUID id);
 }
