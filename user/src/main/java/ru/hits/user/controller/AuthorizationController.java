@@ -10,6 +10,7 @@ import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
 import ru.hits.common.dtos.user.UserRegistrationResponse;
 import ru.hits.user.service.LoginService;
+import ru.hits.user.service.interfaces.ILoginService;
 import ru.hits.user.service.interfaces.IRegistrationService;
 
 @RestController
@@ -17,7 +18,7 @@ import ru.hits.user.service.interfaces.IRegistrationService;
 @RequestMapping("/integration/account")
 public class AuthorizationController {
     private final IRegistrationService registrationService;
-    private final LoginService loginService;
+    private final ILoginService loginService;
 
     @PostMapping("/registration")
     public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
