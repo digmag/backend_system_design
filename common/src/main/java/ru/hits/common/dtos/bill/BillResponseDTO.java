@@ -15,4 +15,5 @@ public class BillResponseDTO {
     private Integer amount;
     private Type type;
     private Status status;
+    private String name;
 }

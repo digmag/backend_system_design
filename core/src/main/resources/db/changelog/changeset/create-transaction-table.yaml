@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transaction
+      author: Dmitry Slabukhin
+      changes:
+        - createTable:
+            tableName: transaction
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: bill_from
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: bill_to
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: amount
+                  type: integer
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: transaction
+            baseColumnNames: [ bill_from ]
+            referencedTableName: bill
+            referencedColumnNames: [ id ]
+            constraintName: FK_bill_from_transaction
+        - addForeignKeyConstraint:
+            baseTableName: transaction
+            baseColumnNames: [ bill_to ]
+            referencedTableName: bill
+            referencedColumnNames: [ id ]
+            constraintName: FK_bill_to_transaction
