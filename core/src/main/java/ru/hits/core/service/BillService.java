@@ -173,6 +173,9 @@ public class BillService implements IBillService {
         if(billFrom == null || billTo == null){
             throw new BadRequestException("Счет не существует");
         }
+        if(billFrom.getUserId() != user.getId()){
+            throw new ForbiddenException("Счет не принадлежит пользователю");
+        }
         if(billFrom.getStatus() != Status.OPEN || billTo.getStatus() != Status.OPEN){
             throw new ForbiddenException("Счета закрыты для перевода");
         }
