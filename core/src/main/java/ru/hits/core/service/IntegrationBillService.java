@@ -1,0 +1,82 @@
+package ru.hits.core.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Service;
+import ru.hits.common.dtos.bill.BillResponseDTO;
+import ru.hits.common.dtos.bill.TransactionResponseDTO;
+import ru.hits.common.security.exception.BadRequestException;
+import ru.hits.common.security.exception.ForbiddenException;
+import ru.hits.core.repository.BillRepository;
+import ru.hits.core.repository.TransactionRepository;
+import ru.hits.core.service.interfaces.IIntegrationBillService;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class IntegrationBillService implements IIntegrationBillService {
+    private final BillRepository billRepository;
+    private final TransactionRepository transactionRepository;
+    @Override
+    public List<BillResponseDTO> getUsersBills(UUID userId) {
+        var bills = billRepository.findAllByUserId(userId);
+        return bills.stream().map(bill ->
+                new BillResponseDTO(
+                        bill.getId(),
+                        bill.getUserId(),
+                        bill.getAmount(),
+                        bill.getType(),
+                        bill.getStatus(),
+                        bill.getName()
+                )).toList();
+    }
+
+    @Override
+    public List<TransactionResponseDTO> getBillsTransactions(UUID billId) {
+        var bill = billRepository.findById(billId).orElse(null);
+        if(bill == null){
+            throw new BadRequestException("Счета не существует");
+        }
+        var transactions = transactionRepository.findAllByBillFrom(bill);
+        return transactions.stream().map(transaction -> {
+            var billFrom = transaction.getBillFrom();
+            var billTo = transaction.getBillTo();
+            BillResponseDTO billFromDTO = null;
+            BillResponseDTO billToDTO = null;
+            if(billFrom != null){
+                billFromDTO = new BillResponseDTO(
+                        billFrom.getId(),
+                        billFrom.getUserId(),
+                        billFrom.getAmount(),
+                        billFrom.getType(),
+                        billFrom.getStatus(),
+                        billFrom.getName()
+                );
+            }
+            if(billTo != null) {
+                billToDTO = new BillResponseDTO(
+                        billTo.getId(),
+                        billTo.getUserId(),
+                        billTo.getAmount(),
+                        billTo.getType(),
+                        billTo.getStatus(),
+                        billTo.getName()
+                );
+            }
+            return new TransactionResponseDTO(
+                    transaction.getId(),
+                    billFromDTO,
+                    billToDTO,
+                    transaction.getAmount()
+            );
+        }).toList();
+    }
+
+    @Override
+    public Boolean isBillExists(UUID billId) {
+        var bill = billRepository.findById(billId).orElse(null);
+        return bill!=null;
+    }
+}

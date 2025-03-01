@@ -32,4 +32,6 @@ public interface UserClient {
 
     @PostMapping("/integration/information/isadmin")
     Boolean isAdmin(@RequestBody JwtUserData userData);
+    @GetMapping("/integration/information/isexists/{id}")
+    Boolean isUserExists(@PathVariable UUID id);
 }
