@@ -3,10 +3,13 @@ package ru.hits.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hits.common.dtos.bill.BillResponseDTO;
+import ru.hits.common.dtos.bill.Status;
 import ru.hits.common.dtos.bill.TransactionResponseDTO;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
+import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IIntegrationBillService;
@@ -78,5 +81,16 @@ public class IntegrationBillService implements IIntegrationBillService {
     public Boolean isBillExists(UUID billId) {
         var bill = billRepository.findById(billId).orElse(null);
         return bill!=null;
+    }
+
+    @Transactional
+    @Override
+    public void blockBill(UUID billId) {
+        var bill = billRepository.findById(billId).orElse(null);
+        if(bill == null){
+            throw new NotFoundException("Счвета не существует");
+        }
+        bill.setStatus(Status.BLOCKED);
+        billRepository.save(bill);
     }
 }

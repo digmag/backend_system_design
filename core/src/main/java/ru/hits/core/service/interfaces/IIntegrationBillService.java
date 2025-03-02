@@ -12,4 +12,5 @@ public interface IIntegrationBillService {
     List<BillResponseDTO> getUsersBills(UUID userId);
     List<TransactionResponseDTO> getBillsTransactions(UUID billId);
     Boolean isBillExists(UUID billId);
+    void blockBill(UUID billId);
 }
