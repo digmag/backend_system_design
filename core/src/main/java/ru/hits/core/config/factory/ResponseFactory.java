@@ -1,17 +1,13 @@
 package ru.hits.core.config.factory;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.hits.common.security.JwtUserData;
-import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.core.feignClient.UserClient;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Component
 @RequiredArgsConstructor
