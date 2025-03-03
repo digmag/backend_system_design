@@ -8,6 +8,7 @@ import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
+import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
 import ru.hits.core.entity.TransactionEntity;
 import ru.hits.core.feignClient.UserClient;
@@ -21,7 +22,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class BillService implements IBillService {
-    private  final UserClient userClient;
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
 
@@ -29,9 +29,6 @@ public class BillService implements IBillService {
     @Override
     public BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication) {
         JwtUserData user = (JwtUserData) authentication.getPrincipal();
-        if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
-            throw new BadRequestException("Пользователь не может создать счет");
-        }
         BillEntity bill = new BillEntity(
                 UUID.randomUUID(),
                 user.getId(),
@@ -61,18 +58,22 @@ public class BillService implements IBillService {
         return null;
     }
 
+    @Transactional
     @Override
     public void closeBill(UUID id, Authentication authentication) {
-
+        var user = (JwtUserData) authentication.getPrincipal();
+        BillEntity bill = billRepository.findById(id).orElse(null);
+        if(bill == null){
+            throw new NotFoundException("Счета не существует");
+        }
+        bill.setStatus(Status.CLOSED);
+        billRepository.save(bill);
     }
 
     @Transactional
     @Override
     public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var user = (JwtUserData) authentication.getPrincipal();
-        if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
-            throw new ForbiddenException("Невозможно создать перевод");
-        }
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -105,9 +106,6 @@ public class BillService implements IBillService {
     @Override
     public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var user = (JwtUserData) authentication.getPrincipal();
-        if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
-            throw new ForbiddenException("Невозможно создать перевод");
-        }
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -143,9 +141,6 @@ public class BillService implements IBillService {
     @Override
     public List<BillResponseDTO> getMyBills(Authentication authentication) {
         var user = (JwtUserData) authentication.getPrincipal();
-        if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
-            throw new ForbiddenException("Пользователь не существует");
-        }
         List<BillEntity> billEntities = billRepository.findAllByUserId(user.getId());
         return billEntities.stream().map(bill ->
                 new BillResponseDTO(
@@ -165,9 +160,6 @@ public class BillService implements IBillService {
                                               TransactionCreateDTO transactionCreateDTO,
                                               Authentication authentication) {
         var user = (JwtUserData) authentication.getPrincipal();
-        if(!userClient.isUserExists(user.getId()) || userClient.isAdmin(user)){
-            throw new ForbiddenException("Невозможно создать перевод");
-        }
         BillEntity billFrom = billRepository.findById(from).orElse(null);
         BillEntity billTo = billRepository.findById(to).orElse(null);
         if(billFrom == null || billTo == null){
