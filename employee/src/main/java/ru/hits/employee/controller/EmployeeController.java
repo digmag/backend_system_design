@@ -40,48 +40,22 @@ public class EmployeeController {
     }
 
     @GetMapping("/users")
-    public List<UserResponseDTO> users(Authentication authentication){
-        JwtUserData userData = (JwtUserData) authentication.getPrincipal();
-        var isAdmin = userClient.isAdmin(userData);
-        if(!isAdmin){
-            throw new ForbiddenException("Пользователь не может реализовать этот запрос");
-        }
+    public List<UserResponseDTO> users(){
         return userClient.users();
     }
 
     @GetMapping("/users/{id}")
-    public UserResponseDTO getOne(@PathVariable UUID id, Authentication authentication){
-        JwtUserData userData = (JwtUserData) authentication.getPrincipal();
-        var isAdmin = userClient.isAdmin(userData);
-        if(!isAdmin){
-            throw new ForbiddenException("Пользователь не может реализовать этот запрос");
-        }
+    public UserResponseDTO getOne(@PathVariable UUID id){
         return userClient.getOne(id);
     }
 
     @GetMapping("/users/{userId}/bills")
-    public List<BillResponseDTO> getUsersBills(@PathVariable UUID userId, Authentication authentication){
-        JwtUserData userData = (JwtUserData) authentication.getPrincipal();
-        var isAdmin = userClient.isAdmin(userData);
-        if(!isAdmin){
-            throw new ForbiddenException("Пользователь не может реализовать этот запрос");
-        }
-        if(!userClient.isUserExists(userId)){
-            throw new BadRequestException("Пользователь не существует");
-        }
+    public List<BillResponseDTO> getUsersBills(@PathVariable UUID userId){
         return billClient.getUsersBills(userId);
     }
 
     @GetMapping("/bill/{billId}/transactions")
-    public List<TransactionResponseDTO> getBillsTransactions(@PathVariable UUID billId, Authentication authentication){
-        JwtUserData userData = (JwtUserData) authentication.getPrincipal();
-        var isAdmin = userClient.isAdmin(userData);
-        if(!isAdmin){
-            throw new ForbiddenException("Пользователь не может реализовать этот запрос");
-        }
-        if(!billClient.isBillExists(billId)){
-            throw new NotFoundException("Счета не существует");
-        }
+    public List<TransactionResponseDTO> getBillsTransactions(@PathVariable UUID billId){
         return billClient.getBillsTransactions(billId);
     }
 
