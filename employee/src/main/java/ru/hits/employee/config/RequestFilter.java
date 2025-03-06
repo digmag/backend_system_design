@@ -32,32 +32,33 @@ public class RequestFilter implements Filter{
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         String httpPath = httpRequest.getServletPath();
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        var jwt = httpRequest.getHeader(HEADER_JWT);
-        if(jwt == null){
-            httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
-        JwtUserData userData;
-        try{
-            var key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-            var data = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(jwt.replace(HEADER_PREFIX, ""));
-            var idStr = String.valueOf(data.getBody().get("id"));
-            userData = new JwtUserData(
-                    idStr == null ? null : UUID.fromString(idStr)
-            );
-        } catch (JwtException e) {
-            httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
-        try {
-            requestFactory.create(httpPath, userData, httpResponse);
-        }
-        catch (IOException e){
-            System.out.println(httpPath+ " " + userData.getId().toString());
-            return;
+        if(!httpPath.contains("/api/employee/client/login")) {
+            var jwt = httpRequest.getHeader(HEADER_JWT);
+            if (jwt == null) {
+                httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
+            JwtUserData userData;
+            try {
+                var key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+                var data = Jwts.parserBuilder()
+                        .setSigningKey(key)
+                        .build()
+                        .parseClaimsJws(jwt.replace(HEADER_PREFIX, ""));
+                var idStr = String.valueOf(data.getBody().get("id"));
+                userData = new JwtUserData(
+                        idStr == null ? null : UUID.fromString(idStr)
+                );
+            } catch (JwtException e) {
+                httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
+            try {
+                requestFactory.create(httpPath, userData, httpResponse);
+            } catch (IOException e) {
+                System.out.println(httpPath + " " + userData.getId().toString());
+                return;
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
