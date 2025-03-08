@@ -37,7 +37,8 @@ public class RegistrationService implements IRegistrationService {
                 UUID.randomUUID(),
                 userRegistrationDTO.getEmail(),
                 securityConfig.bCryptPasswordEncoder().encode(userRegistrationDTO.getPassword()),
-                userRegistrationDTO.getStatus());
+                userRegistrationDTO.getStatus(),
+                true);
         userRepository.save(user);
         return new UserRegistrationResponse(user.getId(), user.getStatus(), user.getEmail());
     }

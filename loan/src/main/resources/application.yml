@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: loan-application
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://185.103.70.190:15432/loan
+    username: admin
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+server:
+  port: 8084
+
+spring.config.import: classpath:/security-config.yml

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.employee.config.factory.RequestFactory;
+import ru.hits.employee.feignClient.UserClient;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,7 @@ import static ru.hits.common.security.SecurityConst.HEADER_PREFIX;
 public class RequestFilter implements Filter{
     private final String secretKey = "qqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrttty";
     private final RequestFactory requestFactory;
+    private final UserClient userClient;
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,

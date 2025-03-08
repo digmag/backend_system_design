@@ -1,4 +1,4 @@
-package ru.hits.common.dtos.user;
+package ru.hits.common.dtos.loan;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDTO {
+public class LoanResponseDTO {
     private UUID id;
-    private String email;
-    private Status status;
-    private boolean isActive;
+    private String name;
+    private Double percent;
 }

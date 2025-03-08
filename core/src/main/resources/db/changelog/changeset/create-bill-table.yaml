@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: amount
-                  type: integer
+                  type: double
                   constraints:
                     nullable: false
               - column:

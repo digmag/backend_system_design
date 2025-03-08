@@ -50,4 +50,9 @@ public class BillController {
                                           Authentication authentication){
         return billService.transaction(from,to, transactionCreateDTO, authentication);
     }
+
+    @PatchMapping("/{id}/close")
+    public void close(@PathVariable UUID id, Authentication authentication){
+        billService.closeBill(id, authentication);
+    }
 }

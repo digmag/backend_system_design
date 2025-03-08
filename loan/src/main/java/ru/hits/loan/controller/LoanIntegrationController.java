@@ -2,7 +2,12 @@ package ru.hits.loan.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.hits.common.dtos.loan.LoanCreateDTO;
+import ru.hits.common.dtos.loan.LoanResponseDTO;
+import ru.hits.loan.service.interfaces.ILoanCheck;
+import ru.hits.loan.service.interfaces.ILoanService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -10,24 +15,32 @@ import java.util.UUID;
 @RequestMapping(value = "/integration/loan")
 public class LoanIntegrationController {
 
-    @PostMapping("/crate")
-    public void create(){
+    private final ILoanService loanService;
+    private final ILoanCheck loanCheck;
 
+    @GetMapping("/getone/{id}")
+    public LoanResponseDTO getOne(@PathVariable UUID id){
+        return loanService.getOne(id);
     }
 
-    @DeleteMapping
-    public void delete(){
+    @PostMapping("/create")
+    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO){
+        return loanService.create(loanCreateDTO);
+    }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id){
+        loanService.delete(id);
     }
 
     @GetMapping
-    public void allLoans(){
-
+    public List<LoanResponseDTO> allLoans(){
+        return loanService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public void getOne(@PathVariable UUID id){
-
+    @GetMapping("/isexist/{id}")
+    public Boolean isExist(@PathVariable UUID id){
+        return loanCheck.isExists(id);
     }
 
 }

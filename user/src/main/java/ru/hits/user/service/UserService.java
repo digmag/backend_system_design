@@ -25,7 +25,7 @@ public class UserService implements IUserService {
         return usersList
                 .stream()
                 .map(entity ->
-                        new UserResponseDTO(entity.getId(), entity.getEmail(), entity.getStatus())
+                        new UserResponseDTO(entity.getId(), entity.getEmail(), entity.getStatus(), entity.isActive())
                 )
                 .toList();
     }
@@ -36,7 +36,7 @@ public class UserService implements IUserService {
         if(user == null){
             throw new NotFoundException("Пользователь не найден");
         }
-        return new UserResponseDTO(user.getId(), user.getEmail(), user.getStatus());
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getStatus(), user.isActive());
     }
 
     @SneakyThrows

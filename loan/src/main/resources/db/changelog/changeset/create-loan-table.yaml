@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users
+      id: create-loan
       author: Dmitry Slabukhin
       changes:
         - createTable:
-            tableName: users
+            tableName: loan
             columns:
               - column:
                   name: id
@@ -13,23 +13,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: email
-                  type: varchar(255)
-                  constraints:
-                    unique: true
-                    nullable: false
-              - column:
-                  name: password
+                  name: name
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: status
-                  type: integer
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_active
-                  type: boolean
+                  name: percent
+                  type: double
                   constraints:
                     nullable: false
