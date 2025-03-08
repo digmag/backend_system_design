@@ -59,4 +59,9 @@ public class EmployeeController {
         return billClient.getBillsTransactions(billId);
     }
 
+    @PatchMapping("/users/block/{id}")
+    public void  block(@PathVariable UUID id){
+        userClient.block(id);
+    }
+
 }

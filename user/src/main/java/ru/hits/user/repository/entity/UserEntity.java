@@ -25,4 +25,6 @@ public class UserEntity {
     private String email;
     private String password;
     private Status status;
+    @Column(name = "is_active")
+    private boolean isActive;
 }

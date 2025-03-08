@@ -9,6 +9,8 @@ import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.security.SecurityConfig;
 import ru.hits.common.security.exception.BadRequestException;
+import ru.hits.common.security.exception.ForbiddenException;
+import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.common.security.props.SecurityProps;
 import ru.hits.user.repository.entity.TokenEntity;
 import ru.hits.user.repository.entity.UserEntity;
@@ -50,6 +52,9 @@ public class LoginService implements ILoginService {
         if(user == null || !securityConfig.bCryptPasswordEncoder().matches(userLoginDTO.getPassword(), user.getPassword())){
             throw new BadRequestException("Пользователь с токим email не найден");
         }
+        if(!user.isActive()){
+            throw new ForbiddenException("Пользователь заблокирован");
+        }
         TokensPair tokensPair = new TokensPair(UUID.randomUUID().toString(),generateAccess(user));
         TokenEntity token = new TokenEntity(
                 UUID.randomUUID(),
@@ -59,5 +64,15 @@ public class LoginService implements ILoginService {
                 );
         tokenRepository.save(token);
         return tokensPair;
+    }
+
+    @Override
+    public void block(UUID id) {
+        var user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        user.setActive(false);
+        userRepository.save(user);
     }
 }
