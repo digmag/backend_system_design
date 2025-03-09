@@ -23,8 +23,14 @@ public class LoanService implements ILoanService {
         LoanEntity loan = new LoanEntity(
                 UUID.randomUUID(),
                 loanCreateDTO.getLoanName(),
-                loanCreateDTO.getPercent()
+                loanCreateDTO.getPercent(),
+                true
         );
+        var prev = loanRepository.findByIsActive(true).orElse(null);
+        if(prev != null){
+            prev.setIsActive(false);
+            loanRepository.save(prev);
+        }
         loanRepository.save(loan);
         return new LoanResponseDTO(
                 loan.getId(),

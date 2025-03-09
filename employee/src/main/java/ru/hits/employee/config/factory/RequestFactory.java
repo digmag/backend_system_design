@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.employee.feignClient.BillClient;
+import ru.hits.employee.feignClient.LoanClient;
 import ru.hits.employee.feignClient.UserClient;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class RequestFactory {
     private final UserClient userClient;
     private final BillClient billClient;
+    private final LoanClient loanClient;
 
     public void create(String path, JwtUserData userData , HttpServletResponse httpResponse) throws IOException {
         if(!path.contains("/api/employee/client/login")){
@@ -41,6 +43,16 @@ public class RequestFactory {
             if(splitPath.contains("transactions") && splitPath.size() == 6){
                 var isBillExists = billClient.isBillExists(UUID.fromString(splitPath.get(4)));
                 if(!isBillExists){
+                    httpResponse.setStatus(HttpStatus.NOT_FOUND.value());
+                    throw new IOException();
+                }
+            }
+
+            if (splitPath.contains("loan")
+                    && !splitPath.contains("create")
+                    && splitPath.size() == 5){
+                var isExists = loanClient.isExist(UUID.fromString(splitPath.get(4)));
+                if(!isExists){
                     httpResponse.setStatus(HttpStatus.NOT_FOUND.value());
                     throw new IOException();
                 }
