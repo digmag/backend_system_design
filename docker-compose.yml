@@ -34,7 +34,7 @@ services:
     environment:
       - USER_SERVICE_URL=http://user:8081/
       - BILL_SERVICE_URL=http://core:8083/
-      - LOAN_SERVICE_URL=http://user:8084/
+      - LOAN_SERVICE_URL=http://loan:8084/
     expose:
       - "8082"
     networks:
