@@ -2,5 +2,6 @@ package ru.hits.common.dtos.bill;
 
 public enum Type {
     SAVING,
-    NORMAL
+    NORMAL,
+    CREDIT
 }

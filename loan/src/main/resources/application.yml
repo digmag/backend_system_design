@@ -12,6 +12,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  quartz:
+    job-store-type: memory
 server:
   port: 8084
 

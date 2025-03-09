@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hits.common.dtos.bill.BillResponseDTO;
-import ru.hits.common.dtos.bill.Status;
-import ru.hits.common.dtos.bill.TransactionResponseDTO;
+import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
+import ru.hits.core.entity.BillEntity;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IIntegrationBillService;
@@ -42,8 +41,10 @@ public class IntegrationBillService implements IIntegrationBillService {
         if(bill == null){
             throw new BadRequestException("Счета не существует");
         }
-        var transactions = transactionRepository.findAllByBillFrom(bill);
-        return transactions.stream().map(transaction -> {
+        var transactionsFrom = transactionRepository.findAllByBillFrom(bill);
+        var transactionsTo = transactionRepository.findAllByBillTo(bill);
+        transactionsFrom.addAll(transactionsTo);
+        return transactionsFrom.stream().map(transaction -> {
             var billFrom = transaction.getBillFrom();
             var billTo = transaction.getBillTo();
             BillResponseDTO billFromDTO = null;
@@ -92,5 +93,26 @@ public class IntegrationBillService implements IIntegrationBillService {
         }
         bill.setStatus(Status.BLOCKED);
         billRepository.save(bill);
+    }
+
+    @Override
+    public BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId) {
+        BillEntity bill = new BillEntity(
+                id,
+                userId,
+                (-1)*billCreateDTO.getAmount(),
+                Type.CREDIT,
+                Status.OPEN,
+                billCreateDTO.getName()
+        );
+        billRepository.save(bill);
+        return new BillResponseDTO(
+                bill.getId(),
+                bill.getUserId(),
+                bill.getAmount(),
+                bill.getType(),
+                bill.getStatus(),
+                bill.getName()
+        );
     }
 }

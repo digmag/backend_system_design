@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-deal
+      author: Dmitry Slabukhin
+      changes:
+        - createTable:
+            tableName: deal
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: loan
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bill_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sum
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: during
+                  type: date
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: deal
+            baseColumnNames: [ loan ]
+            referencedTableName: loan
+            referencedColumnNames: [ id ]
+            constraintName: FK_deal_loan

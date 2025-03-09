@@ -9,6 +9,7 @@ import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.TransactionCreateDTO;
 import ru.hits.common.dtos.bill.TransactionResponseDTO;
 import ru.hits.core.service.interfaces.IBillService;
+import ru.hits.core.service.interfaces.IIntegrationBillService;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BillController {
     private final IBillService billService;
+    private final IIntegrationBillService iBillService;
 
     @PostMapping("/create")
     public BillResponseDTO create(@RequestBody BillCreateDTO billCreateDTO, Authentication authentication){
@@ -54,5 +56,10 @@ public class BillController {
     @PatchMapping("/{id}/close")
     public void close(@PathVariable UUID id, Authentication authentication){
         billService.closeBill(id, authentication);
+    }
+
+    @GetMapping("/transactions/{billId}")
+    public List<TransactionResponseDTO> getBillsTransactions(@PathVariable UUID billId){
+        return iBillService.getBillsTransactions(billId);
     }
 }
