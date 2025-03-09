@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
+import ru.hits.common.dtos.loan.LoanResponseDTO;
 
 import java.util.UUID;
 
 @Service
 public interface IDealService {
     BillResponseDTO createCreditBill(CreditBillCreateDTO billCreateDTO, Authentication authentication);
+    LoanResponseDTO getActual();
     void scheduleTransactions();
 }

@@ -8,6 +8,7 @@ import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
 import ru.hits.common.dtos.bill.TransactionCreateDTO;
+import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.NotFoundException;
@@ -54,6 +55,17 @@ public class DealService implements IDealService {
         billCreateDTO.setAmount(dealEntity.getSum());
         dealRepository.save(dealEntity);
         return billClient.createCreditBill(billCreateDTO, dealEntity.getId(), user.getId());
+    }
+
+    @Override
+    public LoanResponseDTO getActual() {
+        var loan = loanRepository.findByIsActive(true).orElse(null);
+        return new LoanResponseDTO(
+                loan.getId(),
+                loan.getName(),
+                loan.getPercent(),
+                loan.getIsActive()
+        );
     }
 
     @Override
