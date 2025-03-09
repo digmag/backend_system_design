@@ -10,7 +10,7 @@ services:
     environment:
       - GATEWAY_EMPLOYEE_URI=http://employee:8082/
       - GATEWAY_CORE_URI=http://core:8083/
-      - GETEWAY_LOAN_URI=http://loan:8083/
+      - GETEWAY_LOAN_URI=http://loan:8084/
     ports:
       - "8080:8080"
     networks:
@@ -34,7 +34,7 @@ services:
     environment:
       - USER_SERVICE_URL=http://user:8081/
       - BILL_SERVICE_URL=http://core:8083/
-      - LOAN_SERVICE_URL=http://user:8084/
+      - LOAN_SERVICE_URL=http://loan:8084/
     expose:
       - "8082"
     networks:
