@@ -1,10 +1,8 @@
 package ru.hits.core.service.interfaces;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.hits.common.dtos.bill.BillCreateDTO;
-import ru.hits.common.dtos.bill.BillResponseDTO;
-import ru.hits.common.dtos.bill.CreditBillCreateDTO;
-import ru.hits.common.dtos.bill.TransactionResponseDTO;
+import ru.hits.common.dtos.bill.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,4 +15,9 @@ public interface IIntegrationBillService {
     void blockBill(UUID billId);
 
     BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId);
+    void transaction(UUID from,
+                     UUID to,
+                     TransactionCreateDTO transactionCreateDTO);
+    BillResponseDTO getCreditBill(UUID id);
+    void closeCreditBill(UUID id);
 }

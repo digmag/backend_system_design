@@ -23,4 +23,5 @@ public interface IBillService {
                                        TransactionCreateDTO transactionCreateDTO,
                                        Authentication authentication);
     List<TransactionResponseDTO> transactions(UUID id);
+    void closeBillInOneTap(UUID id);
 }

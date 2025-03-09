@@ -32,6 +32,11 @@ databaseChangeLog:
                   type: date
                   constraints:
                     nullable: false
+              - column:
+                  name: from_date
+                  type: date
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: deal
             baseColumnNames: [ loan ]

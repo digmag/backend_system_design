@@ -9,6 +9,7 @@ import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
+import ru.hits.core.entity.TransactionEntity;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IIntegrationBillService;
@@ -97,6 +98,8 @@ public class IntegrationBillService implements IIntegrationBillService {
 
     @Override
     public BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId) {
+        BillEntity myBill = billRepository.findById(billCreateDTO.getLinkedBill()).orElse(null);
+        myBill.setAmount(myBill.getAmount()+billCreateDTO.getAmount());
         BillEntity bill = new BillEntity(
                 id,
                 userId,
@@ -106,6 +109,7 @@ public class IntegrationBillService implements IIntegrationBillService {
                 billCreateDTO.getName()
         );
         billRepository.save(bill);
+        billRepository.save(myBill);
         return new BillResponseDTO(
                 bill.getId(),
                 bill.getUserId(),
@@ -114,5 +118,48 @@ public class IntegrationBillService implements IIntegrationBillService {
                 bill.getStatus(),
                 bill.getName()
         );
+    }
+
+    @Transactional
+    @Override
+    public void transaction(UUID from, UUID to, TransactionCreateDTO transactionCreateDTO) {
+        var bFrom = billRepository.findById(from).orElse(null);
+        var bTo = billRepository.findById(to).orElse(null);
+        TransactionEntity transaction = new TransactionEntity(
+                UUID.randomUUID(),
+                bFrom,
+                bTo,
+                transactionCreateDTO.getAmount()
+        );
+        if (bFrom.getAmount()<transactionCreateDTO.getAmount()){
+            bTo.setAmount(bTo.getAmount() - 100.0);
+        }
+        else{
+            bFrom.setAmount(bFrom.getAmount()-transactionCreateDTO.getAmount());
+        }
+        bTo.setAmount(bTo.getAmount()+transactionCreateDTO.getAmount());
+        billRepository.save(bFrom);
+        billRepository.save(bTo);
+        transactionRepository.save(transaction);
+    }
+
+    @Override
+    public BillResponseDTO getCreditBill(UUID id) {
+        var bill = billRepository.findById(id).orElse(null);
+        return new BillResponseDTO(
+                bill.getId(),
+                bill.getUserId(),
+                bill.getAmount(),
+                bill.getType(),
+                bill.getStatus(),
+                bill.getName()
+        );
+    }
+
+    @Override
+    public void closeCreditBill(UUID id) {
+        var bill = billRepository.findById(id).orElse(null);
+        bill.setStatus(Status.CLOSED);
+        billRepository.save(bill);
     }
 }

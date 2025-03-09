@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
+import ru.hits.common.dtos.bill.TransactionCreateDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.NotFoundException;
@@ -18,6 +19,8 @@ import ru.hits.loan.service.interfaces.IDealService;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +47,9 @@ public class DealService implements IDealService {
                 UUID.randomUUID(),
                 actualLoan,
                 billCreateDTO.getLinkedBill(),
-                billCreateDTO.getAmount()*actualLoan.getPercent()/100,
-                billCreateDTO.getTo()
+                billCreateDTO.getAmount()*actualLoan.getPercent()/100+billCreateDTO.getAmount(),
+                billCreateDTO.getTo(),
+                LocalDate.now()
         );
         billCreateDTO.setAmount(dealEntity.getSum());
         dealRepository.save(dealEntity);
@@ -54,6 +58,18 @@ public class DealService implements IDealService {
 
     @Override
     public void scheduleTransactions() {
-
+        var deals = dealRepository.findAll();
+        deals.forEach(dealEntity -> {
+            int defer = dealEntity.getDuring().until(dealEntity.getFrom()).getDays();
+            double cent = dealEntity.getSum()/defer;
+            var bill = billClient.getBill(dealEntity.getId());
+            if(bill.getAmount() <= 0) {
+                billClient.createTransaction(dealEntity.getId(),dealEntity.getBillId(),
+                        new TransactionCreateDTO(cent));
+            }
+            else{
+                billClient.closeCreditBill(dealEntity.getId());
+            }
+        });
     }
 }

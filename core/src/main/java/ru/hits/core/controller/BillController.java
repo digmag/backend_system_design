@@ -62,4 +62,9 @@ public class BillController {
     public List<TransactionResponseDTO> getBillsTransactions(@PathVariable UUID billId){
         return iBillService.getBillsTransactions(billId);
     }
+
+    @PutMapping("/credit/{id}/close")
+    public void closeBillInOneTap(@PathVariable UUID id){
+        billService.closeBillInOneTap(id);
+    }
 }
