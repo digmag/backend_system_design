@@ -29,3 +29,9 @@ WORKDIR /app
 COPY --from=build /build/core/target/core-0.0.1-SNAPSHOT.jar /app/core/target/
 COPY --from=build /build/common/target/common-0.0.1-SNAPSHOT.jar /app/core/target/
 ENTRYPOINT ["java", "-jar", "/app/core/target/core-0.0.1-SNAPSHOT.jar"]
+
+FROM maven:3.8.4-openjdk-17-slim AS loan-build
+WORKDIR /app
+COPY --from=build /build/loan/target/loan-0.0.1-SNAPSHOT.jar /app/loan/target/
+COPY --from=build /build/common/target/common-0.0.1-SNAPSHOT.jar /app/core/target/
+ENTRYPOINT ["java", "-jar", "/app/loan/target/loan-0.0.1-SNAPSHOT.jar"]
