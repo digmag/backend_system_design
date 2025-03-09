@@ -198,6 +198,11 @@ public class BillService implements IBillService {
         return null;
     }
 
+    @Override
+    public void closeBillInOneTap(UUID id) {
+        
+    }
+
     private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Double amount){
         TransactionEntity transaction = new TransactionEntity(
                 UUID.randomUUID(),
