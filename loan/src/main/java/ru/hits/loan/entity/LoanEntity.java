@@ -1,4 +1,4 @@
-package ru.hits.core.entity;
+package ru.hits.loan.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.hits.common.dtos.bill.Status;
-import ru.hits.common.dtos.bill.Type;
 
 import java.util.UUID;
 
@@ -18,14 +16,12 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bill")
-public class BillEntity {
+@Table(name = "loan")
+public class LoanEntity {
     @Id
     private UUID id;
-    @Column(name = "user_id")
-    private UUID userId;
-    private Double amount;
-    private Type type;
-    private Status status;
     private String name;
+    private Double percent;
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

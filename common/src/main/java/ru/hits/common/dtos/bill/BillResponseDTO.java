@@ -12,7 +12,7 @@ import java.util.UUID;
 public class BillResponseDTO {
     private UUID id;
     private UUID userId;
-    private Integer amount;
+    private Double amount;
     private Type type;
     private Status status;
     private String name;

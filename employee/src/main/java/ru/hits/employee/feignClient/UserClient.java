@@ -2,10 +2,7 @@ package ru.hits.employee.feignClient;
 
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
@@ -34,4 +31,9 @@ public interface UserClient {
     Boolean isAdmin(@RequestBody JwtUserData userData);
     @GetMapping("/integration/information/isexists/{id}")
     Boolean isUserExists(@PathVariable UUID id);
+
+    @GetMapping("/integration/account/block/{id}")
+    void block (@PathVariable UUID id);
+
+
 }

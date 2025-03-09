@@ -32,7 +32,7 @@ public class BillService implements IBillService {
         BillEntity bill = new BillEntity(
                 UUID.randomUUID(),
                 user.getId(),
-                0,
+                0.0,
                 billCreateDTO.getType(),
                 Status.OPEN,
                 billCreateDTO.getName()
@@ -48,23 +48,17 @@ public class BillService implements IBillService {
         );
     }
 
-    @Override
-    public BillResponseDTO getBillInfo(UUID id, Authentication authentication) {
-        return null;
-    }
-
-    @Override
-    public List<TransactionResponseDTO> getBillTransactions(UUID billId, Authentication authentication) {
-        return null;
-    }
-
     @Transactional
     @Override
     public void closeBill(UUID id, Authentication authentication) {
         var user = (JwtUserData) authentication.getPrincipal();
+
         BillEntity bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new NotFoundException("Счета не существует");
+        }
+        if(!user.getId().equals(bill.getUserId())){
+            throw new ForbiddenException("Невозможно закрыть счет");
         }
         bill.setStatus(Status.CLOSED);
         billRepository.save(bill);
@@ -199,6 +193,11 @@ public class BillService implements IBillService {
                 ),
                 transaction.getAmount()
         );
+    }
+
+    @Override
+    public List<TransactionResponseDTO> transactions(UUID id) {
+        return null;
     }
 
     private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Integer amount){

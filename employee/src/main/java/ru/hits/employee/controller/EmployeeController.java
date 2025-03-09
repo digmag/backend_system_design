@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.TransactionResponseDTO;
+import ru.hits.common.dtos.loan.LoanCreateDTO;
+import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
@@ -16,6 +18,7 @@ import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.employee.feignClient.BillClient;
+import ru.hits.employee.feignClient.LoanClient;
 import ru.hits.employee.feignClient.UserClient;
 
 import java.util.List;
@@ -29,6 +32,8 @@ public class EmployeeController {
     private final UserClient userClient;
     @Autowired
     private final BillClient billClient;
+    @Autowired
+    private final LoanClient loanClient;
     @PostMapping("/client/registration")
     public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
         return userClient.registration(userRegistrationDTO);
@@ -57,6 +62,31 @@ public class EmployeeController {
     @GetMapping("/bill/{billId}/transactions")
     public List<TransactionResponseDTO> getBillsTransactions(@PathVariable UUID billId){
         return billClient.getBillsTransactions(billId);
+    }
+
+    @PatchMapping("/users/block/{id}")
+    public void  block(@PathVariable UUID id){
+        userClient.block(id);
+    }
+
+    @PostMapping("/loan/create")
+    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO){
+        return loanClient.create(loanCreateDTO);
+    }
+
+    @GetMapping("/loan")
+    public List<LoanResponseDTO> getAllLoan(){
+        return loanClient.allLoans();
+    }
+
+    @GetMapping("/loan/{id}")
+    public LoanResponseDTO getOneLoan(@PathVariable UUID id){
+        return loanClient.getOne(id);
+    }
+
+    @DeleteMapping("/loan/{id}")
+    public void delete(@PathVariable UUID id){
+        loanClient.delete(id);
     }
 
 }

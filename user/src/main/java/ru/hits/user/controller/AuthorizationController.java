@@ -1,10 +1,7 @@
 package ru.hits.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.token.TokensPair;
 import ru.hits.common.dtos.user.UserLoginDTO;
 import ru.hits.common.dtos.user.UserRegistrationDTO;
@@ -12,6 +9,8 @@ import ru.hits.common.dtos.user.UserRegistrationResponse;
 import ru.hits.user.service.LoginService;
 import ru.hits.user.service.interfaces.ILoginService;
 import ru.hits.user.service.interfaces.IRegistrationService;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +27,10 @@ public class AuthorizationController {
     @PostMapping("/login")
     public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
         return loginService.login(userLoginDTO);
+    }
+
+    @GetMapping("/block/{id}")
+    public void block(@PathVariable UUID id){
+        loginService.block(id);
     }
 }

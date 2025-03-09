@@ -15,7 +15,7 @@ public class CustomDecoder implements ErrorDecoder {
             case 400:
                 throw new BadRequestException("Ошибка 404");
             case 403:
-                throw new ForbiddenException("Ошибка 404");
+                throw new ForbiddenException("Ошибка 403");
             default:
                 break;
         }
