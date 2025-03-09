@@ -23,5 +23,5 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "bill_to", referencedColumnName = "id")
     private BillEntity billTo;
-    private Integer amount;
+    private Double amount;
 }

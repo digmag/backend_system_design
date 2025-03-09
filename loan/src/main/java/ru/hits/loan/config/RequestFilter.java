@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import static ru.hits.common.security.SecurityConst.HEADER_JWT;
-import static ru.hits.common.security.SecurityConst.HEADER_PREFIX;
+import static ru.hits.common.security.SecurityConst.*;
 
 @RequiredArgsConstructor
 @Component
@@ -33,12 +32,13 @@ public class RequestFilter implements Filter{
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         String httpPath = httpRequest.getServletPath();
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        if(!httpPath.contains("/api/employee/client/login")) {
-            var jwt = httpRequest.getHeader(HEADER_JWT);
-            if (jwt == null) {
-                httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
+        var jwt = httpRequest.getHeader(HEADER_JWT);
+        var api = httpRequest.getHeader(HEADER_API_KEY);
+        if (jwt == null && api== null) {
+            httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+        if(jwt != null){
             JwtUserData userData;
             try {
                 var key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -61,6 +61,10 @@ public class RequestFilter implements Filter{
                 return;
             }
         }
+        if(api != null){
+            filterChain.doFilter(servletRequest,servletResponse);
+        }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

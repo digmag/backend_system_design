@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionCreateDTO {
-    private int amount;
+    private Double amount;
 }

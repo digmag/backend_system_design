@@ -24,7 +24,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: amount
-                  type: integer
+                  type: double
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:

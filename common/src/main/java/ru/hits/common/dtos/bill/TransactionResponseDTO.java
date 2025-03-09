@@ -13,5 +13,5 @@ public class TransactionResponseDTO {
     private UUID id;
     private BillResponseDTO from;
     private BillResponseDTO to;
-    private Integer amount;
+    private Double amount;
 }
