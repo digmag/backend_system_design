@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, UUID> {
     List<TransactionEntity> findAllByBillFrom(BillEntity billFrom);
+    List<TransactionEntity> findAllByBillTo(BillEntity billTo);
 }

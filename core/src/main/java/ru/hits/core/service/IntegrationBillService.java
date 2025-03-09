@@ -41,8 +41,10 @@ public class IntegrationBillService implements IIntegrationBillService {
         if(bill == null){
             throw new BadRequestException("Счета не существует");
         }
-        var transactions = transactionRepository.findAllByBillFrom(bill);
-        return transactions.stream().map(transaction -> {
+        var transactionsFrom = transactionRepository.findAllByBillFrom(bill);
+        var transactionsTo = transactionRepository.findAllByBillTo(bill);
+        transactionsFrom.addAll(transactionsTo);
+        return transactionsFrom.stream().map(transaction -> {
             var billFrom = transaction.getBillFrom();
             var billTo = transaction.getBillTo();
             BillResponseDTO billFromDTO = null;
