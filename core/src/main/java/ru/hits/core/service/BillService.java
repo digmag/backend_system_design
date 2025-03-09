@@ -67,7 +67,6 @@ public class BillService implements IBillService {
     @Transactional
     @Override
     public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
-        var user = (JwtUserData) authentication.getPrincipal();
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -99,7 +98,6 @@ public class BillService implements IBillService {
 
     @Override
     public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
-        var user = (JwtUserData) authentication.getPrincipal();
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -200,7 +198,7 @@ public class BillService implements IBillService {
         return null;
     }
 
-    private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Integer amount){
+    private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Double amount){
         TransactionEntity transaction = new TransactionEntity(
                 UUID.randomUUID(),
                 billFrom,

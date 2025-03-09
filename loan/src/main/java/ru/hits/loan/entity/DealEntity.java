@@ -25,4 +25,6 @@ public class DealEntity {
     private UUID billId;
     private Double sum;
     private LocalDate during;
+    @Column(name = "from_date")
+    private LocalDate from;
 }
