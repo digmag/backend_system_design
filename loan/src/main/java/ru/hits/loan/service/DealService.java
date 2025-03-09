@@ -8,6 +8,7 @@ import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
 import ru.hits.common.dtos.bill.TransactionCreateDTO;
+import ru.hits.common.dtos.loan.DealResponseDTO;
 import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
@@ -83,5 +84,14 @@ public class DealService implements IDealService {
                 billClient.closeCreditBill(dealEntity.getId());
             }
         });
+    }
+
+    @Override
+    public DealResponseDTO getDeal(UUID id) {
+        var deal = dealRepository.findById(id).orElse(null);
+        return new DealResponseDTO(
+                deal.getId(),
+                deal.getBillId()
+        );
     }
 }

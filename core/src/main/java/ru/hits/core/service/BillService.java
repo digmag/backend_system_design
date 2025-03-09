@@ -11,6 +11,7 @@ import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
 import ru.hits.core.entity.TransactionEntity;
+import ru.hits.core.feignClient.LoanClient;
 import ru.hits.core.feignClient.UserClient;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class BillService implements IBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
+    private final LoanClient loanClient;
 
     @Transactional
     @Override
@@ -56,6 +58,19 @@ public class BillService implements IBillService {
         BillEntity bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new NotFoundException("Счета не существует");
+        }
+        if(bill.getType() == Type.CREDIT){
+            var deal = loanClient.getDeal(bill.getId());
+            var linkedBill =  billRepository.findById(deal.getLinkedBillId());
+            if((linkedBill.get().getAmount() + bill.getAmount())<0){
+                throw new BadRequestException("Невозможно закрыть кредитный счет");
+            }
+            var baseAmount = linkedBill.get().getAmount();
+            linkedBill.get().setAmount(baseAmount - bill.getAmount());
+            bill.setAmount(bill.getAmount() + baseAmount);
+        }
+        if(bill.getAmount()<0){
+            throw new BadRequestException("Невозможно закрыть счет");
         }
         if(!user.getId().equals(bill.getUserId())){
             throw new ForbiddenException("Невозможно закрыть счет");
@@ -212,3 +227,5 @@ public class BillService implements IBillService {
         return transactionRepository.save(transaction);
     }
 }
+
+
