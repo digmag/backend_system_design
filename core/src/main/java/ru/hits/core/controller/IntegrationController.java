@@ -1,11 +1,10 @@
 package ru.hits.core.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
+import ru.hits.common.dtos.bill.CreditBillCreateDTO;
 import ru.hits.common.dtos.bill.TransactionResponseDTO;
 import ru.hits.core.service.interfaces.IIntegrationBillService;
 
@@ -30,5 +29,12 @@ public class IntegrationController {
     @GetMapping("/exists/{id}")
     public Boolean isBillExists(@PathVariable UUID id){
         return billService.isBillExists(id);
+    }
+
+    @PostMapping("/credit/{userId}/create/{id}")
+    BillResponseDTO createCreditBill(@RequestBody CreditBillCreateDTO billCreateDTO,
+                                     @PathVariable(name = "id") UUID id,
+                                     @PathVariable(name = "userId") UUID userId){
+        return billService.createCreditBill(id, billCreateDTO, userId);
     }
 }
