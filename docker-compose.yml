@@ -32,6 +32,8 @@ services:
       target: employee-build
     environment:
       - USER_SERVICE_URL=http://user:8081/
+      - BILL_SERVICE_URL=http://core:8083/
+      - LOAN_SERVICE_URL=http://user:8084/
     expose:
       - "8082"
     networks:
@@ -46,6 +48,18 @@ services:
       - USER_SERVICE_URL=http://user:8081/
     expose:
       - "8083"
+    networks:
+      - my-network
+
+  loan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: loan-build
+    environment:
+      - USER_SERVICE_URL=http://user:8081/
+    expose:
+      - "8084"
     networks:
       - my-network
 
