@@ -35,7 +35,8 @@ public class LoanService implements ILoanService {
         return new LoanResponseDTO(
                 loan.getId(),
                 loan.getName(),
-                loan.getPercent()
+                loan.getPercent(),
+                loan.getIsActive()
         );
     }
 
@@ -53,7 +54,8 @@ public class LoanService implements ILoanService {
         return new LoanResponseDTO(
                 loan.getId(),
                 loan.getName(),
-                loan.getPercent()
+                loan.getPercent(),
+                loan.getIsActive()
         );
     }
 
@@ -62,7 +64,8 @@ public class LoanService implements ILoanService {
         return loanRepository.findAll().stream().map(loanEntity -> new LoanResponseDTO(
                 loanEntity.getId(),
                 loanEntity.getName(),
-                loanEntity.getPercent()
+                loanEntity.getPercent(),
+                loanEntity.getIsActive()
                 )).toList();
     }
 }

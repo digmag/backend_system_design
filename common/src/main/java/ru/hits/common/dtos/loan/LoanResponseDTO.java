@@ -13,4 +13,5 @@ public class LoanResponseDTO {
     private UUID id;
     private String name;
     private Double percent;
+    private Boolean isActual;
 }
