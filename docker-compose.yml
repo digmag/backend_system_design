@@ -56,8 +56,6 @@ services:
       context: .
       dockerfile: Dockerfile
       target: loan-build
-    environment:
-      - USER_SERVICE_URL=http://user:8081/
     expose:
       - "8084"
     networks:
