@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.core.feignClient.UserClient;
+import ru.hits.core.repository.BillRepository;
 
 import java.io.IOException;
 
