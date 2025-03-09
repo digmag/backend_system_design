@@ -22,3 +22,8 @@ databaseChangeLog:
                   type: double
                   constraints:
                     nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
