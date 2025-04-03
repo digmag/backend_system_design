@@ -2,8 +2,10 @@ package ru.hits.loan.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.hits.common.dtos.loan.DealResponseDTO;
 import ru.hits.common.dtos.loan.LoanCreateDTO;
 import ru.hits.common.dtos.loan.LoanResponseDTO;
+import ru.hits.loan.service.interfaces.IDealService;
 import ru.hits.loan.service.interfaces.ILoanCheck;
 import ru.hits.loan.service.interfaces.ILoanService;
 
@@ -17,6 +19,7 @@ public class LoanIntegrationController {
 
     private final ILoanService loanService;
     private final ILoanCheck loanCheck;
+    private final IDealService dealService;
 
     @GetMapping("/getone/{id}")
     public LoanResponseDTO getOne(@PathVariable UUID id){
@@ -41,6 +44,11 @@ public class LoanIntegrationController {
     @GetMapping("/isexist/{id}")
     public Boolean isExist(@PathVariable UUID id){
         return loanCheck.isExists(id);
+    }
+
+    @GetMapping("/deal/{id}")
+    public DealResponseDTO getDeal(@PathVariable UUID id){
+        return dealService.getDeal(id);
     }
 
 }
