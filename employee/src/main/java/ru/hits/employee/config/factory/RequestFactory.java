@@ -28,7 +28,7 @@ public class RequestFactory {
             var exists = userClient.isUserExists(userData.getId());
             var isAdmin = userClient.isAdmin(userData);
             if(!exists || !isAdmin){
-                httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
+                httpResponse.setStatus(HttpStatus.NOT_FOUND.value());
                 throw new IOException();
             }
 

@@ -131,13 +131,8 @@ public class IntegrationBillService implements IIntegrationBillService {
                 bTo,
                 transactionCreateDTO.getAmount()
         );
-        if (bTo.getAmount()<transactionCreateDTO.getAmount()){
-            bFrom.setAmount(bFrom.getAmount() - 100.0);
-        }
-        else{
-            bTo.setAmount(bTo.getAmount()-transactionCreateDTO.getAmount());
-        }
-        bFrom.setAmount(bFrom.getAmount()+transactionCreateDTO.getAmount());
+        bFrom.setAmount(bFrom.getAmount()-transactionCreateDTO.getAmount());
+        bTo.setAmount(bTo.getAmount()+transactionCreateDTO.getAmount());
         billRepository.save(bFrom);
         billRepository.save(bTo);
         transactionRepository.save(transaction);

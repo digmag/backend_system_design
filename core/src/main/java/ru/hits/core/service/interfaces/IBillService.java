@@ -18,7 +18,7 @@ public interface IBillService {
     TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication);
     TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication);
     List<BillResponseDTO> getMyBills(Authentication authentication);
-    TransactionResponseDTO transaction(UUID from,
+    String transaction(UUID from,
                                        UUID to,
                                        TransactionCreateDTO transactionCreateDTO,
                                        Authentication authentication);

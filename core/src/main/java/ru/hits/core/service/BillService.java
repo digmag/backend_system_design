@@ -15,6 +15,7 @@ import ru.hits.core.feignClient.UserClient;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IBillService;
+import ru.hits.core.service.interfaces.IIntegrationBillService;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class BillService implements IBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
+    private final IIntegrationBillService integrationBillService;
 
     @Transactional
     @Override
@@ -147,7 +149,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
-    public TransactionResponseDTO transaction(UUID from,
+    public String transaction(UUID from,
                                               UUID to,
                                               TransactionCreateDTO transactionCreateDTO,
                                               Authentication authentication) {
@@ -157,7 +159,7 @@ public class BillService implements IBillService {
         if(billFrom == null || billTo == null){
             throw new BadRequestException("Счет не существует");
         }
-        if(billFrom.getUserId() != user.getId()){
+        if(!billFrom.getUserId().equals(user.getId())){
             throw new ForbiddenException("Счет не принадлежит пользователю");
         }
         if(billFrom.getStatus() != Status.OPEN || billTo.getStatus() != Status.OPEN){
@@ -166,31 +168,8 @@ public class BillService implements IBillService {
         if(billFrom.getAmount()<transactionCreateDTO.getAmount()){
             throw new BadRequestException("На счете недостаточно средств");
         }
-        billFrom.setAmount(billFrom.getAmount() - transactionCreateDTO.getAmount());
-        billTo.setAmount(billTo.getAmount() + transactionCreateDTO.getAmount());
-        billRepository.save(billFrom);
-        billRepository.save(billTo);
-        TransactionEntity transaction = createTransaction(billFrom, billTo, transactionCreateDTO.getAmount());
-        return new TransactionResponseDTO(
-                transaction.getId(),
-                new BillResponseDTO(
-                        transaction.getBillFrom().getId(),
-                        transaction.getBillFrom().getUserId(),
-                        transaction.getBillFrom().getAmount(),
-                        transaction.getBillFrom().getType(),
-                        transaction.getBillFrom().getStatus(),
-                        transaction.getBillFrom().getName()
-                ),
-                new BillResponseDTO(
-                        transaction.getBillTo().getId(),
-                        transaction.getBillTo().getUserId(),
-                        transaction.getBillTo().getAmount(),
-                        transaction.getBillTo().getType(),
-                        transaction.getBillTo().getStatus(),
-                        transaction.getBillTo().getName()
-                ),
-                transaction.getAmount()
-        );
+        integrationBillService.transaction(from, to, transactionCreateDTO);
+        return "Создано";
     }
 
     @Override

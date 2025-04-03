@@ -46,7 +46,7 @@ public class BillController {
     }
 
     @PostMapping("/transaction/{from}/{to}")
-    public TransactionResponseDTO transaction(@PathVariable UUID from,
+    public String transaction(@PathVariable UUID from,
                                           @PathVariable UUID to,
                                           @RequestBody TransactionCreateDTO transactionCreateDTO,
                                           Authentication authentication){
