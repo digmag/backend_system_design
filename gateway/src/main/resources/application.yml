@@ -19,3 +19,7 @@ spring:
           uri: ${GETEWAY_LOAN_URI:http://localhost:8084/}
           predicates:
             - Path=/api/loan/**
+        - id: theme-applocation
+          uri: ${GATEWAY_THEME_URI:http://localhost:8085/}
+          predicates:
+            - Path=/api/theme/**

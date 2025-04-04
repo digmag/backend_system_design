@@ -2,9 +2,7 @@ package ru.hits.theme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.theme.ThemeResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.theme.service.ThemeServicee;
@@ -18,6 +16,11 @@ public class ThemeController {
     @GetMapping
     public ThemeResponseDTO getTheme(Authentication authentication){
         return themeServicee.getTheme(authentication);
+    }
+
+    @PostMapping
+    public ThemeResponseDTO setTheme(Authentication authentication, @RequestBody ThemeResponseDTO themeResponseDTO){
+       return themeServicee.setTheme(authentication, themeResponseDTO);
     }
 
 }
