@@ -9,9 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoanResponseDTO {
+public class DealResponseDTO {
     private UUID id;
-    private String name;
-    private Double percent;
-    private Boolean isActual;
+    private UUID linkedBillId;
 }

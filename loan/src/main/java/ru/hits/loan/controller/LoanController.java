@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
+import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.loan.service.interfaces.IDealService;
 
 import java.util.UUID;
@@ -19,5 +20,10 @@ public class LoanController {
     @PostMapping("/bill")
     public BillResponseDTO createBill(@RequestBody CreditBillCreateDTO billCreateDTO, Authentication authentication){
         return dealService.createCreditBill(billCreateDTO, authentication);
+    }
+
+    @GetMapping("/actual")
+    public LoanResponseDTO getActual(){
+        return dealService.getActual();
     }
 }
