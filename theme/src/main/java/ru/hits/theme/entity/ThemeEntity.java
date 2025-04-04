@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import ru.hits.common.dtos.theme.ThemeEnum;
 
 import java.util.UUID;
 
@@ -23,5 +24,5 @@ public class ThemeEntity {
     private UUID id;
     @Column(name = "user_id")
     private UUID userId;
-    private String theme;
+    private ThemeEnum theme;
 }
