@@ -3,7 +3,7 @@ import { useLazyLoginQuery } from "../api"
 import { useSearchParams } from "react-router-dom"
 
 export type SSOFormProps = {
-    login: string
+    email: string
     password: string
 }
 
@@ -13,8 +13,19 @@ export const useSSOForm = () => {
     const [params, ] = useSearchParams()
     const handleSubmit = async (vals: SSOFormProps) => {
         try{
-            await trigger(vals).unwrap()
-            window.location.href = params.get('redirectURI')!
+            const redirectURI = params.get('redirectURI')
+            const appId = params.get('appId')
+            if(redirectURI == null || appId == null){
+                throw ''
+            }
+            if(appId === 'client' || appId === 'employee'){
+                await trigger(vals).unwrap().then(data => {
+                    window.location.href = `${redirectURI}?token=${data.accessToken}`
+                })
+            }
+            else{
+                throw ''
+            }
         }
         catch {
             alert('Не удалось войти')
