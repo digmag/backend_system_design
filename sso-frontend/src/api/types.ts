@@ -1,4 +1,9 @@
 export type Token = {
-    accessToken: string
-    refreshToken: string
+    token: string
 }
+export type Apps = {
+    id: string
+    appId: string
+}
+
+export type AppsCreate = Pick<Apps, 'appId'>

@@ -1,5 +1,5 @@
 import { Button, Container, Flex, PasswordInput, TextInput, Title } from "@mantine/core";
-import { useSSOForm } from "./hook"
+import { useSSOForm } from "../hook"
 
 function App() {
   const {form, onSubmit} = useSSOForm();

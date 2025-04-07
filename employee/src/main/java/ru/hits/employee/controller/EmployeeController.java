@@ -40,8 +40,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/client/login")
-    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
-        return userClient.login(userLoginDTO);
+    public TokensPair login(@RequestParam("code") String token){
+        return userClient.login(token);
     }
 
     @GetMapping("/users")

@@ -1,6 +1,6 @@
 import { useForm } from "@mantine/form"
 import { useLazyLoginQuery } from "../api"
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 export type SSOFormProps = {
     email: string
@@ -11,6 +11,7 @@ export const useSSOForm = () => {
     const form = useForm<SSOFormProps>()
     const [trigger] = useLazyLoginQuery()
     const [params, ] = useSearchParams()
+    const navigate = useNavigate()
     const handleSubmit = async (vals: SSOFormProps) => {
         try{
             const redirectURI = params.get('redirectURI')
@@ -20,7 +21,9 @@ export const useSSOForm = () => {
             }
             if(appId === 'client' || appId === 'employee'){
                 await trigger(vals).unwrap().then(data => {
-                    window.location.href = `${redirectURI}?token=${data.accessToken}`
+                    localStorage.setItem('token', data.token)
+                    navigate(`/apps?redirectURI=${redirectURI}&appId=${appId}`)
+                    //window.location.href = `${redirectURI}?token=${data.token}`
                 })
             }
             else{
@@ -37,3 +40,5 @@ export const useSSOForm = () => {
     }
 
 }
+
+export {useApps} from './useApps'

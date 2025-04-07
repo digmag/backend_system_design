@@ -25,8 +25,8 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
-        return loginService.login(userLoginDTO);
+    public TokensPair login(@RequestParam(name = "token") String header){
+        return loginService.login(header);
     }
 
     @GetMapping("/block/{id}")
