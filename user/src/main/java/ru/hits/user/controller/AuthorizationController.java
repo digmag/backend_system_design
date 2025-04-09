@@ -20,8 +20,9 @@ public class AuthorizationController {
     private final ILoginService loginService;
 
     @PostMapping("/registration")
-    public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
-        return registrationService.registration(userRegistrationDTO);
+    public void registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+        System.out.println("Начали выполнять регистрацию");
+        registrationService.registration(userRegistrationDTO);
     }
 
     @PostMapping("/login")

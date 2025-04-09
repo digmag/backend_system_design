@@ -16,7 +16,7 @@ import java.util.UUID;
 @FeignClient(name="user-client",url = "${USER_SERVICE_URL:http://localhost:8081}")
 public interface UserClient {
     @PostMapping("/integration/account/registration")
-    UserRegistrationResponse registration(@RequestParam UserRegistrationDTO userRegistrationDTO);
+    void registration(@RequestBody UserRegistrationDTO userRegistrationDTO);
 
     @PostMapping("/integration/account/login")
     TokensPair login(@RequestParam(name = "token") String token);

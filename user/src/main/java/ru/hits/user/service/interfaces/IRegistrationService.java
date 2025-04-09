@@ -7,5 +7,5 @@ import ru.hits.common.dtos.user.UserRegistrationResponse;
 
 @Service
 public interface IRegistrationService {
-    UserRegistrationResponse registration(UserRegistrationDTO userRegistrationDTO);
+    void registration(UserRegistrationDTO userRegistrationDTO);
 }

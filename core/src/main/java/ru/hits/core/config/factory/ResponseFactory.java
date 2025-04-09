@@ -17,21 +17,10 @@ public class ResponseFactory {
     private final UserClient userClient;
 
     public void create(String path, JwtUserData userData ,HttpServletResponse httpResponse) throws IOException {
-        if (path.contains("/api/core/bill/create") || path.contains("/topup") || path.contains("/topdown") ||
-            path.contains("/api/core/bill/my") || path.contains("/api/core/bill/transaction/")
-        ) {
-            if (!userClient.isUserExists(userData.getId()) || userClient.isAdmin(userData)) {
-                httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
-                throw new IOException();
-            }
-        }
-        else {
+
             if (!userClient.isUserExists(userData.getId())){
                 httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
                 throw new IOException();
             }
-        }
-
-
     }
 }
