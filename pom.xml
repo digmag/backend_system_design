@@ -28,6 +28,7 @@
         <module>employee</module>
         <module>gateway</module>
         <module>loan</module>
+        <module>SSO</module>
     </modules>
 	<scm>
 		<connection/>

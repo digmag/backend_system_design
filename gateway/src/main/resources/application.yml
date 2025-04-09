@@ -19,3 +19,7 @@ spring:
           uri: ${GETEWAY_LOAN_URI:http://localhost:8084/}
           predicates:
             - Path=/api/loan/**
+        - id: sso-app
+          uri: ${GATEWAY_SSO_URI:http://localhost:8086}
+          predicates:
+            - Path=/api/sso/**

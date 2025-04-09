@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-token
+      author: Dmitry Slabukhin
+      changes:
+        - createTable:
+            tableName: apps
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: service_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: tokens
+            baseColumnNames: [ user_id ]
+            referencedTableName: users
+            referencedColumnNames: [ id ]
+            constraintName: FK_authorized-service

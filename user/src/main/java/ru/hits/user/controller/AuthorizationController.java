@@ -20,13 +20,14 @@ public class AuthorizationController {
     private final ILoginService loginService;
 
     @PostMapping("/registration")
-    public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
-        return registrationService.registration(userRegistrationDTO);
+    public void registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+        System.out.println("Начали выполнять регистрацию");
+        registrationService.registration(userRegistrationDTO);
     }
 
     @PostMapping("/login")
-    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
-        return loginService.login(userLoginDTO);
+    public TokensPair login(@RequestParam(name = "token") String header){
+        return loginService.login(header);
     }
 
     @GetMapping("/block/{id}")

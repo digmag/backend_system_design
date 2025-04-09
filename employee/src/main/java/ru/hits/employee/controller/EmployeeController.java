@@ -2,6 +2,7 @@ package ru.hits.employee.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.bill.BillResponseDTO;
@@ -35,13 +36,20 @@ public class EmployeeController {
     @Autowired
     private final LoanClient loanClient;
     @PostMapping("/client/registration")
-    public UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
-        return userClient.registration(userRegistrationDTO);
+    public ResponseEntity<String> registration(@RequestBody UserRegistrationDTO userRegistrationDTO){
+        try {
+            userClient.registration(userRegistrationDTO);
+            return  ResponseEntity.ok("Зарегистрировали");
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.status(401).body("Не удалось зарегистрировать");
+        }
+
     }
 
     @PostMapping("/client/login")
-    public TokensPair login(@RequestBody UserLoginDTO userLoginDTO){
-        return userClient.login(userLoginDTO);
+    public TokensPair login(@RequestParam("code") String token){
+        return userClient.login(token);
     }
 
     @GetMapping("/users")

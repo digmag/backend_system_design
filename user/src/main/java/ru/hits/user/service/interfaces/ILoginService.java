@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Service
 public interface ILoginService {
-    TokensPair login (UserLoginDTO userLoginDTO);
+    TokensPair login (String header);
 
     void block(UUID id);
 }
