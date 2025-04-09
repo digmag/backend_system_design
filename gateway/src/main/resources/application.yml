@@ -23,3 +23,7 @@ spring:
           uri: ${GATEWAY_SSO_URI:http://localhost:8086}
           predicates:
             - Path=/api/sso/**
+        - id: theme-applocation
+          uri: ${GATEWAY_THEME_URI:http://localhost:8085/}
+          predicates:
+            - Path=/api/theme/**

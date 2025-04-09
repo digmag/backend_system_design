@@ -29,6 +29,7 @@
         <module>gateway</module>
         <module>loan</module>
         <module>SSO</module>
+		<module>theme</module>
     </modules>
 	<scm>
 		<connection/>
