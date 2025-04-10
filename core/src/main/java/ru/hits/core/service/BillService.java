@@ -31,6 +31,7 @@ public class BillService implements IBillService {
     @Override
     public BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication) {
         JwtUserData user = (JwtUserData) authentication.getPrincipal();
+
         BillEntity bill = new BillEntity(
                 UUID.randomUUID(),
                 user.getId(),
