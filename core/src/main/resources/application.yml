@@ -12,6 +12,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  main:
+    allow-bean-definition-overriding: true
 server:
   port: 8083
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.TextMessage;
 import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
@@ -26,6 +27,7 @@ public class BillService implements IBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
     private final IIntegrationBillService integrationBillService;
+    private final WsService wsService;
 
     @Transactional
     @Override
@@ -90,12 +92,14 @@ public class BillService implements IBillService {
         bill.setAmount(bill.getAmount() + transactionCreateDTO.getAmount());
         billRepository.save(bill);
         TransactionEntity transactionEntity = createTransaction(null, bill, transactionCreateDTO.getAmount());
-        return new TransactionResponseDTO(
+        var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
                 null,
                 billTo,
                 transactionEntity.getAmount()
         );
+        wsService.sendMessage(bill.getUserId(), null, new TextMessage(transacttt.toString()));
+        return null;
     }
 
     @Override

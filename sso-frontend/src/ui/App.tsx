@@ -1,9 +1,9 @@
 import { Button, Container, Flex, PasswordInput, TextInput, Title } from "@mantine/core";
 import { useSSOForm } from "../hook"
 
+
 function App() {
   const {form, onSubmit} = useSSOForm();
-
   return (
     <Container fluid>
       <Title>Starbly SSO</Title>

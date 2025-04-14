@@ -27,3 +27,7 @@ spring:
           uri: ${GATEWAY_THEME_URI:http://localhost:8085/}
           predicates:
             - Path=/api/theme/**
+        - id: websocket_route
+          uri: ws://localhost:8083
+          predicates:
+            - Path=/api/ws/**

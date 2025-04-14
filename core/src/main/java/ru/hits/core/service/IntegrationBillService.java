@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
 import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
@@ -22,6 +24,7 @@ import java.util.UUID;
 public class IntegrationBillService implements IIntegrationBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
+    private final WsService wsService;
     @Override
     public List<BillResponseDTO> getUsersBills(UUID userId) {
         var bills = billRepository.findAllByUserId(userId);
@@ -133,6 +136,9 @@ public class IntegrationBillService implements IIntegrationBillService {
         );
         bFrom.setAmount(bFrom.getAmount()-transactionCreateDTO.getAmount());
         bTo.setAmount(bTo.getAmount()+transactionCreateDTO.getAmount());
+        wsService.sendMessage(transaction.getBillTo().getUserId(), transaction.getBillFrom().getUserId(),
+                new TextMessage(transaction.toString())
+        );
         billRepository.save(bFrom);
         billRepository.save(bTo);
         transactionRepository.save(transaction);
