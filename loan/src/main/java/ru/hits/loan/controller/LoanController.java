@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
+import ru.hits.common.dtos.loan.LoanRepaymentDTO;
 import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.loan.service.interfaces.IDealService;
 
@@ -26,4 +27,5 @@ public class LoanController {
     public LoanResponseDTO getActual(){
         return dealService.getActual();
     }
+
 }

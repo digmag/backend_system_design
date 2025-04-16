@@ -20,4 +20,6 @@ public interface IIntegrationBillService {
                      TransactionCreateDTO transactionCreateDTO);
     BillResponseDTO getCreditBill(UUID id);
     void closeCreditBill(UUID id);
+
+    UUID getMasterBillId();
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hits.common.dtos.bill.BillCreateDTO;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
 import ru.hits.common.dtos.bill.TransactionCreateDTO;
@@ -18,7 +17,6 @@ import ru.hits.loan.feignClient.BillClient;
 import ru.hits.loan.repository.DealRepository;
 import ru.hits.loan.repository.LoanRepository;
 import ru.hits.loan.service.interfaces.IDealService;
-
 import java.time.LocalDate;
 import java.util.UUID;
 

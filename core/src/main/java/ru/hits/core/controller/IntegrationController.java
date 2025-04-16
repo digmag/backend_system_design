@@ -51,4 +51,9 @@ public class IntegrationController {
     public void closeCreditBill(@PathVariable UUID id){
         billService.closeCreditBill(id);
     }
+
+    @GetMapping("/master")
+    public UUID getMasterBillId() {
+        return billService.getMasterBillId();
+    }
 }

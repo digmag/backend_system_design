@@ -97,26 +97,43 @@ public class IntegrationBillService implements IIntegrationBillService {
     }
 
     @Override
-    public BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId) {
-        BillEntity myBill = billRepository.findById(billCreateDTO.getLinkedBill()).orElse(null);
-        myBill.setAmount(myBill.getAmount()+billCreateDTO.getAmount());
-        BillEntity bill = new BillEntity(
-                id,
+    public BillResponseDTO createCreditBill(UUID creditBillId, CreditBillCreateDTO billCreateDTO, UUID userId) {
+        BillEntity clientBill = billRepository.findById(billCreateDTO.getLinkedBill())
+                .orElseThrow(() -> new BadRequestException("Клиентский счет не найден"));
+
+        BillEntity masterBill = billRepository.findByType(Type.MASTER)
+                .orElseThrow(() -> new BadRequestException("Мастер-счет не найден"));
+
+        double creditAmount = billCreateDTO.getAmount();
+
+        if (masterBill.getAmount() < creditAmount) {
+            throw new BadRequestException("На мастер-счете недостаточно средств");
+        }
+
+        masterBill.setAmount(masterBill.getAmount() - creditAmount);
+        clientBill.setAmount(clientBill.getAmount() + creditAmount);
+
+        billRepository.save(masterBill);
+        billRepository.save(clientBill);
+
+        BillEntity creditBill = new BillEntity(
+                creditBillId,
                 userId,
-                (-1)*billCreateDTO.getAmount(),
+                -creditAmount,
                 Type.CREDIT,
                 Status.OPEN,
                 billCreateDTO.getName()
         );
-        billRepository.save(bill);
-        billRepository.save(myBill);
+
+        billRepository.save(creditBill);
+
         return new BillResponseDTO(
-                bill.getId(),
-                bill.getUserId(),
-                bill.getAmount(),
-                bill.getType(),
-                bill.getStatus(),
-                bill.getName()
+                creditBill.getId(),
+                creditBill.getUserId(),
+                creditBill.getAmount(),
+                creditBill.getType(),
+                creditBill.getStatus(),
+                creditBill.getName()
         );
     }
 
@@ -131,6 +148,9 @@ public class IntegrationBillService implements IIntegrationBillService {
                 bTo,
                 transactionCreateDTO.getAmount()
         );
+        if (bFrom.getAmount() < transactionCreateDTO.getAmount()) {
+            throw new BadRequestException("Недостаточно средств на счете-отправителе");
+        }
         bFrom.setAmount(bFrom.getAmount()-transactionCreateDTO.getAmount());
         bTo.setAmount(bTo.getAmount()+transactionCreateDTO.getAmount());
         billRepository.save(bFrom);
@@ -156,5 +176,12 @@ public class IntegrationBillService implements IIntegrationBillService {
         var bill = billRepository.findById(id).orElse(null);
         bill.setStatus(Status.CLOSED);
         billRepository.save(bill);
+    }
+
+    @Override
+    public UUID getMasterBillId() {
+        return billRepository.findByType(Type.MASTER)
+                .orElseThrow(() -> new NotFoundException("Мастер-счёт не найден"))
+                .getId();
     }
 }

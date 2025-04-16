@@ -26,4 +26,7 @@ public interface BillClient {
 
     @PutMapping("/integration/bill/credit/close/{id}")
     void closeCreditBill(@PathVariable UUID id);
+
+    @GetMapping("/integration/bill/master")
+    UUID getMasterBillId();
 }
