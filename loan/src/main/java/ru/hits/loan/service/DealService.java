@@ -31,6 +31,7 @@ public class DealService implements IDealService {
     private final LoanRepository loanRepository;
     private final DealRepository dealRepository;
     private final BillClient billClient;
+    private final KafkaTransactionProducer kafkaTransactionProducer;
 
     @Transactional
     @Override
@@ -69,9 +70,6 @@ public class DealService implements IDealService {
                 loan.getIsActive()
         );
     }
-
-    @Autowired
-    private KafkaTransactionProducer kafkaTransactionProducer;
 
     public void scheduleTransactions() {
         var deals = dealRepository.findAll();

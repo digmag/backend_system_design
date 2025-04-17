@@ -12,10 +12,10 @@ public class KafkaTransactionProducer {
 
     private final KafkaTemplate<String, TransactionMessageDTO> kafkaTemplate;
 
-    @Value("${kafka.topic.transactions}")
-    private String transactionTopic;
+//    @Value("${kafka.topic.transactions}")
+//    private String transactionTopic;
 
     public void sendTransaction(TransactionMessageDTO message) {
-        kafkaTemplate.send(transactionTopic, message);
+        kafkaTemplate.send("transaction", message);
     }
 }

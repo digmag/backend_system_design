@@ -12,7 +12,8 @@ import ru.hits.common.security.SecurityConfig;
 import ru.hits.common.security.exception.GlobalExceptionHandler;
 import ru.hits.common.security.props.SecurityIntegrationProps;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration.class})
 @ConfigurationPropertiesScan("ru.hits")
 @Import({GlobalExceptionHandler.class, SecurityConfig.class, SecurityIntegrationProps.class})
 @EnableFeignClients

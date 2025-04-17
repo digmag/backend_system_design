@@ -19,4 +19,7 @@ spring:
 server:
   port: 8084
 
+kafka:
+  topic: transactions
+
 spring.config.import: classpath:/security-config.yml
