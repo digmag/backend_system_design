@@ -14,7 +14,12 @@ spring:
       ddl-auto: validate
   quartz:
     job-store-type: memory
+  kafka:
+    bootstrap-servers: 185.103.70.190:9092
 server:
   port: 8084
+
+kafka:
+  topic: transactions
 
 spring.config.import: classpath:/security-config.yml

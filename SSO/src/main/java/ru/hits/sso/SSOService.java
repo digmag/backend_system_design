@@ -9,7 +9,9 @@ import ru.hits.common.security.exception.GlobalExceptionHandler;
 import ru.hits.common.security.props.SecurityIntegrationProps;
 import ru.hits.common.security.props.SecurityProps;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+        org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration.class
+})
 @ConfigurationPropertiesScan("ru.hits")
 @Import({GlobalExceptionHandler.class, SecurityConfig.class, SecurityIntegrationProps.class})
 public class SSOService {

@@ -12,6 +12,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  kafka:
+    bootstrap-servers: 185.103.70.190:9092
+    consumer:
+      group-id: transaction_group
   main:
     allow-bean-definition-overriding: true
 server:
