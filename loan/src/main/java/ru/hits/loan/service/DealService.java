@@ -75,19 +75,20 @@ public class DealService implements IDealService {
         var deals = dealRepository.findAll();
         deals.forEach(dealEntity -> {
             int defer = dealEntity.getDuring().until(dealEntity.getFrom()).getDays();
-            double cent = dealEntity.getSum() / defer;
-            var bill = billClient.getBill(dealEntity.getId());
-
+            double cent = Math.abs(dealEntity.getSum() / defer);
+            var bill = billClient.getBill(dealEntity.getBillId());
             var masterBill = billClient.getMasterBillId();
-            if (bill.getAmount() <= 0) {
+            if (bill.getAmount() <= 0 && bill.getAmount()>=cent && dealEntity.getSum()>0) {
+                dealEntity.setSum(dealEntity.getSum()-cent);
+                dealRepository.save(dealEntity);
                 TransactionMessageDTO message = new TransactionMessageDTO(
-                        dealEntity.getId(),
+                        dealEntity.getBillId(),
                         masterBill,
                         cent
                 );
                 kafkaTransactionProducer.sendTransaction(message);
             } else {
-                billClient.closeCreditBill(dealEntity.getId());
+                //billClient.closeCreditBill(dealEntity.getId());
             }
         });
     }
