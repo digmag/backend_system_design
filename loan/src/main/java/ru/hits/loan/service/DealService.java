@@ -74,8 +74,9 @@ public class DealService implements IDealService {
             int defer = dealEntity.getDuring().until(dealEntity.getFrom()).getDays();
             double cent = dealEntity.getSum()/defer;
             var bill = billClient.getBill(dealEntity.getId());
+            var masterBill = billClient.getMasterBillId();
             if(bill.getAmount() <= 0) {
-                billClient.createTransaction(dealEntity.getId(),dealEntity.getBillId(),
+                billClient.createTransaction(dealEntity.getId(),masterBill,
                         new TransactionCreateDTO(cent));
             }
             else{

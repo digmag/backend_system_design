@@ -180,8 +180,8 @@ public class IntegrationBillService implements IIntegrationBillService {
 
     @Override
     public UUID getMasterBillId() {
-        return billRepository.findByType(Type.MASTER)
-                .orElseThrow(() -> new NotFoundException("Мастер-счёт не найден"))
-                .getId();
+        var bill = billRepository.findByType(Type.MASTER)
+                .orElseThrow(() -> new NotFoundException("Мастер-счёт не найден"));
+        return bill.getId();
     }
 }
