@@ -1,5 +1,7 @@
 package ru.hits.core.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -7,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
+import ru.hits.common.dtos.bill.TransactionResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.core.data.session.SessionWithToken;
 
@@ -25,6 +28,7 @@ import static ru.hits.common.security.SecurityConst.HEADER_PREFIX;
 public class WsService implements WebSocketHandler {
     private final String secretKey = "qqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrttty";
     private final List<SessionWithToken> sessionWithTokenList = new CopyOnWriteArrayList<>();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -53,7 +57,7 @@ public class WsService implements WebSocketHandler {
             WebSocketSession wsSession;
         };
         sessionWithTokenList.forEach(sessionWithToken -> {
-            if(Objects.equals(session, sessionWithToken)){
+            if(Objects.equals(session, sessionWithToken.getSession())){
                 ref.wsSession = sessionWithToken.getSession();
             }
         });
@@ -71,11 +75,13 @@ public class WsService implements WebSocketHandler {
         return false;
     }
 
-    public void sendMessage(UUID userId1, UUID userId2, WebSocketMessage<?> message) {
-        System.out.println(sessionWithTokenList);
+    public void sendMessage(UUID userId1, UUID userId2, TransactionResponseDTO message) throws JsonProcessingException {
+        var json = objectMapper.writeValueAsString(message);
+        System.out.println("Отправка JSON: " + json);
         sessionWithTokenList.forEach(sessionWithToken -> {
            try {
-               sessionWithToken.getSession().sendMessage(message);
+               TextMessage textMessage = new TextMessage(json);
+               sessionWithToken.getSession().sendMessage(textMessage);
            }
            catch (Exception e) {
                System.out.println("Не удалось отправить сообщение");

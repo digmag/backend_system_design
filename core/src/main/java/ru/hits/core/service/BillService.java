@@ -1,6 +1,7 @@
 package ru.hits.core.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
+    @SneakyThrows
     public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
@@ -98,10 +100,11 @@ public class BillService implements IBillService {
                 billTo,
                 transactionEntity.getAmount()
         );
-        wsService.sendMessage(bill.getUserId(), null, new TextMessage(transacttt.toString()));
+        wsService.sendMessage(bill.getUserId(), null, transacttt);
         return null;
     }
 
+    @SneakyThrows
     @Override
     public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var bill = billRepository.findById(id).orElse(null);
@@ -128,12 +131,14 @@ public class BillService implements IBillService {
         bill.setAmount(bill.getAmount() - transactionCreateDTO.getAmount());
         billRepository.save(bill);
         TransactionEntity transactionEntity = createTransaction(bill, null, transactionCreateDTO.getAmount());
-        return new TransactionResponseDTO(
+        var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
-                null,
                 billTo,
+                null,
                 transactionEntity.getAmount()
         );
+        wsService.sendMessage(null, bill.getUserId(), transacttt);
+        return null;
     }
 
     @Override
