@@ -12,6 +12,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  kafka:
+    consumer:
+      group-id: transaction_group
 server:
   port: 8083
 

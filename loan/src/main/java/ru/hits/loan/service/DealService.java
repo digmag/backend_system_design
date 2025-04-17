@@ -1,12 +1,14 @@
 package ru.hits.loan.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hits.common.dtos.bill.BillResponseDTO;
 import ru.hits.common.dtos.bill.CreditBillCreateDTO;
 import ru.hits.common.dtos.bill.TransactionCreateDTO;
+import ru.hits.common.dtos.bill.TransactionMessageDTO;
 import ru.hits.common.dtos.loan.DealResponseDTO;
 import ru.hits.common.dtos.loan.LoanResponseDTO;
 import ru.hits.common.security.JwtUserData;
@@ -14,6 +16,7 @@ import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.loan.entity.DealEntity;
 import ru.hits.loan.feignClient.BillClient;
+import ru.hits.loan.producer.KafkaTransactionProducer;
 import ru.hits.loan.repository.DealRepository;
 import ru.hits.loan.repository.LoanRepository;
 import ru.hits.loan.service.interfaces.IDealService;
@@ -67,18 +70,24 @@ public class DealService implements IDealService {
         );
     }
 
-    @Override
+    @Autowired
+    private KafkaTransactionProducer kafkaTransactionProducer;
+
     public void scheduleTransactions() {
         var deals = dealRepository.findAll();
         deals.forEach(dealEntity -> {
             int defer = dealEntity.getDuring().until(dealEntity.getFrom()).getDays();
-            double cent = dealEntity.getSum()/defer;
+            double cent = dealEntity.getSum() / defer;
             var bill = billClient.getBill(dealEntity.getId());
-            if(bill.getAmount() <= 0) {
-                billClient.createTransaction(dealEntity.getId(),dealEntity.getBillId(),
-                        new TransactionCreateDTO(cent));
-            }
-            else{
+
+            if (bill.getAmount() <= 0) {
+                TransactionMessageDTO message = new TransactionMessageDTO(
+                        dealEntity.getId(),
+                        dealEntity.getBillId(),
+                        cent
+                );
+                kafkaTransactionProducer.sendTransaction(message);
+            } else {
                 billClient.closeCreditBill(dealEntity.getId());
             }
         });
