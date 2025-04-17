@@ -1,9 +1,11 @@
 package ru.hits.core.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.TextMessage;
 import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
@@ -26,6 +28,7 @@ public class BillService implements IBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
     private final IIntegrationBillService integrationBillService;
+    private final WsService wsService;
 
     @Transactional
     @Override
@@ -69,6 +72,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
+    @SneakyThrows
     public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
@@ -91,14 +95,17 @@ public class BillService implements IBillService {
         bill.setAmount(bill.getAmount() + transactionCreateDTO.getAmount());
         billRepository.save(bill);
         TransactionEntity transactionEntity = createTransaction(null, bill, transactionCreateDTO.getAmount());
-        return new TransactionResponseDTO(
+        var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
                 null,
                 billTo,
                 transactionEntity.getAmount()
         );
+        wsService.sendMessage(bill.getUserId(), null, transacttt);
+        return null;
     }
 
+    @SneakyThrows
     @Override
     public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
         var bill = billRepository.findById(id).orElse(null);
@@ -125,12 +132,14 @@ public class BillService implements IBillService {
         bill.setAmount(bill.getAmount() - transactionCreateDTO.getAmount());
         billRepository.save(bill);
         TransactionEntity transactionEntity = createTransaction(bill, null, transactionCreateDTO.getAmount());
-        return new TransactionResponseDTO(
+        var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
-                null,
                 billTo,
+                null,
                 transactionEntity.getAmount()
         );
+        wsService.sendMessage(null, bill.getUserId(), transacttt);
+        return null;
     }
 
     @Override

@@ -38,6 +38,10 @@ public class RequestFilter implements Filter{
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         var jwt = httpRequest.getHeader(HEADER_JWT);
         var api = httpRequest.getHeader(HEADER_API_KEY);
+        if (httpPath.equals("/api/ws")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         if(jwt == null && api== null){
             httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;

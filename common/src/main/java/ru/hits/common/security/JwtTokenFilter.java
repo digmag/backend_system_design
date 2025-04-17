@@ -29,6 +29,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        if (request.getServletPath().equals("/api/ws")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         var jwt = request.getHeader(HEADER_JWT);
         if(jwt == null){
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
