@@ -15,10 +15,7 @@ import ru.hits.core.data.session.SessionWithToken;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static ru.hits.common.security.SecurityConst.HEADER_PREFIX;
@@ -27,18 +24,14 @@ import static ru.hits.common.security.SecurityConst.HEADER_PREFIX;
 @RequiredArgsConstructor
 public class WsService implements WebSocketHandler {
     private final String secretKey = "qqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrtttyyyuuuiiiooopppqqqwwweeerrrttty";
-    private final List<SessionWithToken> sessionWithTokenList = new CopyOnWriteArrayList<>();
+    private final Map<WebSocketSession, UUID> sessionWithTokenList = new HashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         var queryParams = Arrays.stream(session.getUri().getQuery().split("&")).toList();
         var token = queryParams.get(0).split("=");
-        sessionWithTokenList.add(new SessionWithToken(
-                getIdFromToken(token[1]),
-                session
-        ));
-        System.out.println("Подключился клиент: " + session.getId());
+        sessionWithTokenList.put(session, getIdFromToken(token[1]));
     }
 
     @Override
@@ -46,22 +39,11 @@ public class WsService implements WebSocketHandler {
         String payload = message.getPayload().toString();
         System.out.println("Получено сообщение: " + payload);
 
-        for (var s : sessionWithTokenList) {
-            s.getSession().sendMessage(new TextMessage("Hello, " + payload));
-        }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        var ref = new Object() {
-            WebSocketSession wsSession;
-        };
-        sessionWithTokenList.forEach(sessionWithToken -> {
-            if(Objects.equals(session, sessionWithToken.getSession())){
-                ref.wsSession = sessionWithToken.getSession();
-            }
-        });
-        sessionWithTokenList.remove(ref.wsSession);
+        sessionWithTokenList.remove(session);
         System.out.println("Отключился клиент: " + session.getId());
     }
 
@@ -78,15 +60,28 @@ public class WsService implements WebSocketHandler {
     public void sendMessage(UUID userId1, UUID userId2, TransactionResponseDTO message) throws JsonProcessingException {
         var json = objectMapper.writeValueAsString(message);
         System.out.println("Отправка JSON: " + json);
-        sessionWithTokenList.forEach(sessionWithToken -> {
-           try {
-               TextMessage textMessage = new TextMessage(json);
-               sessionWithToken.getSession().sendMessage(textMessage);
-           }
-           catch (Exception e) {
-               System.out.println("Не удалось отправить сообщение");
-           }
-       });
+        sessionWithTokenList.forEach((webSocketSession, uuid) -> {
+            if(message.getFrom() != null){
+                var userIdFrom = message.getFrom().getUserId();
+                if(uuid.equals(userIdFrom)){
+                    try {
+                        webSocketSession.sendMessage(new TextMessage(json));
+                    } catch (IOException e) {
+                        System.out.println("Не удалось отправить сообщение");
+                    }
+                }
+            }
+            if(message.getTo() != null){
+                var userIdTo = message.getTo().getUserId();
+                if(uuid.equals(userIdTo)){
+                    try{
+                        webSocketSession.sendMessage(new TextMessage(json));
+                    }catch (IOException e){
+                        System.out.println("Не удалось отправить сообщение");
+                    }
+                }
+            }
+        });
     }
 
     private UUID getIdFromToken(String token) {

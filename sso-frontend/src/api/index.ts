@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { SSOFormProps } from "../hook"
 import { Apps, AppsCreate, Token } from "./types"
 
-const ssoURL = 'http://localhost:8080'
+const ssoURL = 'http://185.103.70.190:8080'
 
 export const ssoApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: ssoURL}),
