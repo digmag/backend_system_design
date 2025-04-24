@@ -18,9 +18,10 @@ public class ThemeController {
         return themeServicee.getTheme(authentication);
     }
 
-    @PostMapping
-    public ThemeResponseDTO setTheme(Authentication authentication, @RequestBody ThemeResponseDTO themeResponseDTO){
-       return themeServicee.setTheme(authentication, themeResponseDTO);
+    @PostMapping("/post")
+    public ThemeResponseDTO setTheme(@RequestBody ThemeResponseDTO themeResponseDTO,
+                                     @RequestParam(name = "token") String token){
+       return themeServicee.setTheme(themeResponseDTO, token);
     }
 
 }
