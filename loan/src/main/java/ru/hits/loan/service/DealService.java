@@ -39,6 +39,9 @@ public class DealService implements IDealService {
         if(LocalDate.now().isAfter(billCreateDTO.getTo())){
             throw new BadRequestException("Дата окончания кредита не может быть позже");
         }
+        if(billCreateDTO.getAmount() <=0){
+            throw new BadRequestException("Нельзя создать отрицательную транзакцию");
+        }
         var user = (JwtUserData) authentication.getPrincipal();
         var actualLoan = loanRepository.findByIsActive(true).orElse(null);
         if(actualLoan == null){
