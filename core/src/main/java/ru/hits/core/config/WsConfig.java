@@ -14,6 +14,6 @@ public class WsConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(wsService,
                         "/api/ws")
-                .setAllowedOriginPatterns("http://localhost:5173", "http://localhost:7000"); // 👈 CORS
+                .setAllowedOriginPatterns("http://localhost:5173", "http://localhost:5174");
     }
 }

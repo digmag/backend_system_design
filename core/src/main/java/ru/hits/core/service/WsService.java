@@ -31,6 +31,7 @@ public class WsService implements WebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         var queryParams = Arrays.stream(session.getUri().getQuery().split("&")).toList();
         var token = queryParams.get(0).split("=");
+        System.out.println("Подключился клиент "+session.getId() + " "+ getIdFromToken(token[1]).toString());
         sessionWithTokenList.put(session, getIdFromToken(token[1]));
     }
 
