@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.socket.TextMessage;
 import ru.hits.common.dtos.bill.*;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.common.security.exception.BadRequestException;
@@ -13,7 +12,6 @@ import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
 import ru.hits.core.entity.TransactionEntity;
-import ru.hits.core.feignClient.UserClient;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IBillService;
@@ -166,6 +164,10 @@ public class BillService implements IBillService {
         var user = (JwtUserData) authentication.getPrincipal();
         BillEntity billFrom = billRepository.findById(from).orElse(null);
         BillEntity billTo = billRepository.findById(to).orElse(null);
+        if(transactionCreateDTO.getAmount()<=0){
+
+            throw new BadRequestException("Невозможно создать отрицательную транзакцию");
+        }
         if(billFrom == null || billTo == null){
             throw new BadRequestException("Счет не существует");
         }
