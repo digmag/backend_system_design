@@ -17,7 +17,7 @@ public class MetricCollectorService {
     private final MetricRepository metricRepository;
 
     public void saveMetric(MetricCreateDto metricCreateDto) {
-        MetricEntity metricEntity = new MetricEntity();
+        var metricEntity = new MetricEntity();
         metricEntity.setId(UUID.randomUUID());
         metricEntity.setTraceId(metricCreateDto.getTraceId());
         metricEntity.setRequestUri(metricCreateDto.getRequestUri());

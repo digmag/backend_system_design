@@ -19,7 +19,7 @@ public class MetricController {
 
     // Добавление новой метрики
     @PostMapping
-    public ResponseEntity<MetricEntity> createMetric(@RequestBody @Valid MetricCreateDto metricCreateDto) {
+    public ResponseEntity<Void> createMetric(@RequestBody @Valid MetricCreateDto metricCreateDto) {
         metricCollectorService.saveMetric(metricCreateDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
