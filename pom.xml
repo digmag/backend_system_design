@@ -30,6 +30,7 @@
         <module>loan</module>
         <module>SSO</module>
 		<module>theme</module>
+		<module>metric-collector</module>
     </modules>
 	<scm>
 		<connection/>
