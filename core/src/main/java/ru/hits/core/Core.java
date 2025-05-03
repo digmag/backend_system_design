@@ -8,11 +8,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import ru.hits.common.security.SecurityConfig;
 import ru.hits.common.security.exception.GlobalExceptionHandler;
+import ru.hits.common.unstable.UnstableConfig;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("ru.hits")
 @EnableFeignClients
-@Import({GlobalExceptionHandler.class, SecurityConfig.class})
+@Import({GlobalExceptionHandler.class, SecurityConfig.class, UnstableConfig.class})
 public class Core {
     public static void main(String[] args) {
         SpringApplication.run(Core.class, args);

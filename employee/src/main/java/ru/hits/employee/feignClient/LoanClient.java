@@ -8,7 +8,7 @@ import ru.hits.common.dtos.loan.LoanResponseDTO;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "loan-client", url = "${LOAN_SERVICE_URL:http://localhost:8084}")
+@FeignClient(name = "loan-client", url = "${LOAN_SERVICE_URL:http://localhost:8080}")
 public interface LoanClient {
     @GetMapping("/integration/loan/getone/{id}")
     LoanResponseDTO getOne(@PathVariable UUID id);

@@ -14,15 +14,15 @@ spring:
         - id: core-application
           uri: ${GATEWAY_CORE_URI:http://localhost:8083/}
           predicates:
-            - Path=/api/core/**
+            - Path=/api/core/**,/integration/bill/**
         - id: loan-application
           uri: ${GETEWAY_LOAN_URI:http://localhost:8084/}
           predicates:
-            - Path=/api/loan/**
+            - Path=/api/loan/**,/integration/loan/**
         - id: sso-app
           uri: ${GATEWAY_SSO_URI:http://localhost:8086}
           predicates:
-            - Path=/api/sso/**
+            - Path=/api/sso/**,/integration/sso/**
         - id: theme-applocation
           uri: ${GATEWAY_THEME_URI:http://localhost:8085/}
           predicates:
@@ -31,3 +31,7 @@ spring:
           uri: ws://localhost:8083
           predicates:
             - Path=/api/ws/**
+        - id: user-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/integration/information/**,/integration/account/**

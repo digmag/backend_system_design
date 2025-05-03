@@ -6,7 +6,7 @@ import ru.hits.common.dtos.bill.*;
 
 import java.util.UUID;
 
-@FeignClient(name = "bill-client", url = "${BILL_SERVICE_URL:http://localhost:8083}")
+@FeignClient(name = "bill-client", url = "${BILL_SERVICE_URL:http://localhost:8080}")
 public interface BillClient {
     @GetMapping("/integration/bill/exists/{billId}")
     Boolean isBillExists(@PathVariable UUID billId);

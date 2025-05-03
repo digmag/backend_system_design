@@ -9,7 +9,7 @@ import ru.hits.common.dtos.bill.TransactionResponseDTO;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name="bill-client",url = "${BILL_SERVICE_URL:http://localhost:8083}")
+@FeignClient(name="bill-client",url = "${BILL_SERVICE_URL:http://localhost:8080}")
 public interface BillClient {
     @GetMapping("/integration/bill/users/{userId}")
     List<BillResponseDTO> getUsersBills(@PathVariable UUID userId);
