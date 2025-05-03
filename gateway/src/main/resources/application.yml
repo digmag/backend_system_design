@@ -13,6 +13,12 @@ resilience4j:
         wait-duration-in-open-state: 10s
         permitted-number-of-calls-in-half-open-state: 3
         automatic-transition-from-open-to-half-open-enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
+
 spring:
   application:
     name: gateway
