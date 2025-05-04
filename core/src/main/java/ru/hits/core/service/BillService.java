@@ -30,7 +30,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
-    public BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication) {
+    public BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication, UUID ik) {
         JwtUserData user = (JwtUserData) authentication.getPrincipal();
 
         BillEntity bill = new BillEntity(

@@ -20,7 +20,7 @@ public class LoanService implements ILoanService {
 
     @Override
     @Transactional
-    public LoanResponseDTO create(LoanCreateDTO loanCreateDTO) {
+    public LoanResponseDTO create(LoanCreateDTO loanCreateDTO, UUID ik) {
         LoanEntity loan = new LoanEntity(
                 UUID.randomUUID(),
                 loanCreateDTO.getLoanName(),
@@ -42,7 +42,7 @@ public class LoanService implements ILoanService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id, UUID ik) {
         loanRepository.deleteById(id);
     }
 

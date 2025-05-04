@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @Service
 public interface ILoanService {
-    LoanResponseDTO create(LoanCreateDTO loanCreateDTO);
-    void delete(UUID id);
+    LoanResponseDTO create(LoanCreateDTO loanCreateDTO, UUID ik);
+    void delete(UUID id, UUID ik);
     LoanResponseDTO getOne(UUID id);
     List<LoanResponseDTO> getAll();
 }

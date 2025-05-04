@@ -22,8 +22,8 @@ public class BillController {
     private final IIntegrationBillService iBillService;
 
     @PostMapping("/create")
-    public BillResponseDTO create(@RequestBody BillCreateDTO billCreateDTO, Authentication authentication){
-        return billService.create(billCreateDTO, authentication);
+    public BillResponseDTO create(@RequestBody BillCreateDTO billCreateDTO, Authentication authentication, UUID ik){
+        return billService.create(billCreateDTO, authentication, ik);
     }
 
     @PostMapping("/{id}/topup")

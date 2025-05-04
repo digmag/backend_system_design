@@ -7,6 +7,8 @@ import ru.hits.common.dtos.theme.ThemeResponseDTO;
 import ru.hits.common.security.JwtUserData;
 import ru.hits.theme.service.ThemeServicee;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/theme")
@@ -20,8 +22,9 @@ public class ThemeController {
 
     @PostMapping("/post")
     public ThemeResponseDTO setTheme(@RequestBody ThemeResponseDTO themeResponseDTO,
-                                     @RequestParam(name = "token") String token){
-       return themeServicee.setTheme(themeResponseDTO, token);
+                                     @RequestParam(name = "token") String token,
+                                     @RequestHeader(name = "ik") UUID ik){
+       return themeServicee.setTheme(themeResponseDTO, token, ik);
     }
 
 }

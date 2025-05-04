@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 public interface IBillService {
-    BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication);
+    BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication, UUID ik);
     void closeBill(UUID id, Authentication authentication);
 
     TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication);
