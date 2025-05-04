@@ -27,7 +27,7 @@ spring:
       default-filters:
         - name: Retry
           args:
-            retries: 3
+            retries: 10
             statuses: INTERNAL_SERVER_ERROR
             methods: GET,POST,PATCH
         - name: CircuitBreaker
