@@ -6,7 +6,7 @@ import ru.hits.common.dtos.bill.*;
 
 import java.util.UUID;
 
-@FeignClient(name = "bill-client", url = "${BILL_SERVICE_URL:http://localhost:8083}")
+@FeignClient(name = "bill-client", url = "${BILL_SERVICE_URL:http://localhost:8080}")
 public interface BillClient {
     @GetMapping("/integration/bill/exists/{billId}")
     Boolean isBillExists(@PathVariable UUID billId);
@@ -14,18 +14,18 @@ public interface BillClient {
     @PostMapping("/integration/bill/credit/{userId}/create/{id}")
     BillResponseDTO createCreditBill(@RequestBody CreditBillCreateDTO billCreateDTO,
                                      @PathVariable(name = "id") UUID id,
-                                     @PathVariable(name = "userId") UUID userId);
+                                     @PathVariable(name = "userId") UUID userId, @RequestHeader(required = false) UUID ik);
 
     @PostMapping("/integration/bill/transaction/{from}/{to}")
     TransactionResponseDTO createTransaction(@PathVariable UUID from,
                                              @PathVariable UUID to,
-                                             @RequestBody TransactionCreateDTO transactionCreateDTO);
+                                             @RequestBody TransactionCreateDTO transactionCreateDTO,@RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/bill/credit/{id}")
     BillResponseDTO getBill(@PathVariable UUID id);
 
     @PutMapping("/integration/bill/credit/close/{id}")
-    void closeCreditBill(@PathVariable UUID id);
+    void closeCreditBill(@PathVariable UUID id, @RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/bill/master")
     UUID getMasterBillId();

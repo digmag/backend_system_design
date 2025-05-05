@@ -17,8 +17,8 @@ public class LoanController {
     private final IDealService dealService;
 
     @PostMapping("/bill")
-    public BillResponseDTO createBill(@RequestBody CreditBillCreateDTO billCreateDTO, Authentication authentication){
-        return dealService.createCreditBill(billCreateDTO, authentication);
+    public BillResponseDTO createBill(@RequestBody CreditBillCreateDTO billCreateDTO, Authentication authentication, @RequestHeader(required = false) UUID ik){
+        return dealService.createCreditBill(billCreateDTO, authentication, ik);
     }
 
     @GetMapping("/actual")

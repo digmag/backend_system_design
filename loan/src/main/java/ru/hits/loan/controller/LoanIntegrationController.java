@@ -27,13 +27,13 @@ public class LoanIntegrationController {
     }
 
     @PostMapping("/create")
-    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO){
-        return loanService.create(loanCreateDTO);
+    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO, @RequestHeader(required = false) UUID ik){
+        return loanService.create(loanCreateDTO, ik);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id){
-        loanService.delete(id);
+    public void delete(@PathVariable UUID id, @RequestHeader(required = false) UUID ik){
+        loanService.delete(id, ik);
     }
 
     @GetMapping

@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 404);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
+    @ExceptionHandler(InternalServerError.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerError(InternalServerError e){
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
 }

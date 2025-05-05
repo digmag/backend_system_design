@@ -35,32 +35,34 @@ public class DealService implements IDealService {
 
     @Transactional
     @Override
-    public BillResponseDTO createCreditBill(CreditBillCreateDTO billCreateDTO, Authentication authentication) {
-        if(LocalDate.now().isAfter(billCreateDTO.getTo())){
-            throw new BadRequestException("Дата окончания кредита не может быть позже");
-        }
-        if(billCreateDTO.getAmount() <=0){
-            throw new BadRequestException("Нельзя создать отрицательную транзакцию");
-        }
-        var user = (JwtUserData) authentication.getPrincipal();
-        var actualLoan = loanRepository.findByIsActive(true).orElse(null);
-        if(actualLoan == null){
-            throw new NotFoundException("Нет актуальных тарифов по кредитам");
-        }
-        if(!billClient.isBillExists(billCreateDTO.getLinkedBill())){
-            throw new NotFoundException("Счета не существует");
-        }
-        DealEntity dealEntity = new DealEntity(
-                UUID.randomUUID(),
-                actualLoan,
-                billCreateDTO.getLinkedBill(),
-                billCreateDTO.getAmount()*actualLoan.getPercent()/100+billCreateDTO.getAmount(),
-                billCreateDTO.getTo(),
-                LocalDate.now()
-        );
-        billCreateDTO.setAmount(dealEntity.getSum());
-        dealRepository.save(dealEntity);
-        return billClient.createCreditBill(billCreateDTO, dealEntity.getId(), user.getId());
+    public BillResponseDTO createCreditBill(CreditBillCreateDTO billCreateDTO, Authentication authentication, UUID ik) {
+//        if(!dealRepository.existsById(ik)){
+            if(LocalDate.now().isAfter(billCreateDTO.getTo())){
+                throw new BadRequestException("Дата окончания кредита не может быть позже");
+            }
+            if(billCreateDTO.getAmount() <=0){
+                throw new BadRequestException("Нельзя создать отрицательную транзакцию");
+            }
+            var user = (JwtUserData) authentication.getPrincipal();
+            var actualLoan = loanRepository.findByIsActive(true).orElse(null);
+            if(actualLoan == null){
+                throw new NotFoundException("Нет актуальных тарифов по кредитам");
+            }
+            if(!billClient.isBillExists(billCreateDTO.getLinkedBill())){
+                throw new NotFoundException("Счета не существует");
+            }
+            DealEntity dealEntity = new DealEntity(
+                    ik,
+                    actualLoan,
+                    billCreateDTO.getLinkedBill(),
+                    billCreateDTO.getAmount()*actualLoan.getPercent()/100+billCreateDTO.getAmount(),
+                    billCreateDTO.getTo(),
+                    LocalDate.now()
+            );
+            billCreateDTO.setAmount(dealEntity.getSum());
+            dealRepository.save(dealEntity);
+            return billClient.createCreditBill(billCreateDTO, dealEntity.getId(), user.getId(), ik);
+
     }
 
     @Override

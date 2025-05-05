@@ -8,16 +8,16 @@ import ru.hits.common.dtos.loan.LoanResponseDTO;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "loan-client", url = "${LOAN_SERVICE_URL:http://localhost:8084}")
+@FeignClient(name = "loan-client", url = "${LOAN_SERVICE_URL:http://localhost:8080}")
 public interface LoanClient {
     @GetMapping("/integration/loan/getone/{id}")
     LoanResponseDTO getOne(@PathVariable UUID id);
 
     @PostMapping("/integration/loan/create")
-    LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO);
+    LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO, @RequestHeader(required = false) UUID ik);
 
     @DeleteMapping("/integration/loan/{id}")
-    void delete(@PathVariable UUID id);
+    void delete(@PathVariable UUID id, @RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/loan")
     List<LoanResponseDTO> allLoans();

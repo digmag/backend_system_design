@@ -15,7 +15,7 @@ import ru.hits.common.security.JwtUserData;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name="user-client",url = "${USER_SERVICE_URL:http://localhost:8081}")
+@FeignClient(name="user-client",url = "${USER_SERVICE_URL:http://localhost:8080}")
 public interface UserClient {
     @PostMapping("/integration/account/registration")
     UserRegistrationResponse registration(@RequestBody UserRegistrationDTO userRegistrationDTO);

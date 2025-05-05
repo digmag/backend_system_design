@@ -104,7 +104,7 @@ public class IntegrationBillService implements IIntegrationBillService {
     }
 
     @Override
-    public BillResponseDTO createCreditBill(UUID creditBillId, CreditBillCreateDTO billCreateDTO, UUID userId) {
+    public BillResponseDTO createCreditBill(UUID creditBillId, CreditBillCreateDTO billCreateDTO, UUID userId, UUID ik) {
         BillEntity clientBill = billRepository.findById(billCreateDTO.getLinkedBill())
                 .orElseThrow(() -> new BadRequestException("Клиентский счет не найден"));
 
@@ -147,11 +147,11 @@ public class IntegrationBillService implements IIntegrationBillService {
     @Transactional
     @Override
     @SneakyThrows
-    public void transaction(UUID from, UUID to, TransactionCreateDTO transactionCreateDTO) {
+    public void transaction(UUID from, UUID to, TransactionCreateDTO transactionCreateDTO, UUID ik) {
         var bFrom = billRepository.findById(from).orElse(null);
         var bTo = billRepository.findById(to).orElse(null);
         TransactionEntity transaction = new TransactionEntity(
-                UUID.randomUUID(),
+                ik,
                 bFrom,
                 bTo,
                 transactionCreateDTO.getAmount()

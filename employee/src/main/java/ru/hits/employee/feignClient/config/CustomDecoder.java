@@ -5,6 +5,7 @@ import feign.Response;
 import feign.codec.ErrorDecoder;
 import ru.hits.common.security.exception.BadRequestException;
 import ru.hits.common.security.exception.ForbiddenException;
+import ru.hits.common.security.exception.InternalServerError;
 
 public class CustomDecoder implements ErrorDecoder {
     @Override
@@ -16,6 +17,8 @@ public class CustomDecoder implements ErrorDecoder {
                 throw new BadRequestException("Ошибка 404");
             case 403:
                 throw new ForbiddenException("Ошибка 403");
+            case 500:
+                throw new InternalServerError("Вы нашли нестабильный сервис. у вас 500");
             default:
                 break;
         }

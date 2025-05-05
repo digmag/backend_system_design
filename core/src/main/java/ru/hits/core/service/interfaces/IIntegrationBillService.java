@@ -14,10 +14,11 @@ public interface IIntegrationBillService {
     Boolean isBillExists(UUID billId);
     void blockBill(UUID billId);
 
-    BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId);
+    BillResponseDTO createCreditBill(UUID id, CreditBillCreateDTO billCreateDTO, UUID userId, UUID ik);
     void transaction(UUID from,
                      UUID to,
-                     TransactionCreateDTO transactionCreateDTO);
+                     TransactionCreateDTO transactionCreateDTO,
+                     UUID ik);
     BillResponseDTO getCreditBill(UUID id);
     void closeCreditBill(UUID id);
 

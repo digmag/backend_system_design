@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 public interface IDealService {
-    BillResponseDTO createCreditBill(CreditBillCreateDTO billCreateDTO, Authentication authentication);
+    BillResponseDTO createCreditBill(CreditBillCreateDTO billCreateDTO, Authentication authentication, UUID ik);
     LoanResponseDTO getActual();
     void scheduleTransactions();
 

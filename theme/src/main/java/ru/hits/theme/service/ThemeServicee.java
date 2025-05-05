@@ -33,7 +33,8 @@ public class ThemeServicee {
         return new ThemeResponseDTO(theme.getTheme());
     }
 
-    public  ThemeResponseDTO setTheme(ThemeResponseDTO themeResponseDTO, String token){
+    public  ThemeResponseDTO setTheme(ThemeResponseDTO themeResponseDTO, String token, UUID ik){
+
         JwtUserData data = getUserId(token);
         System.out.println(data.getId());
         System.out.println(themeResponseDTO.getTheme());
