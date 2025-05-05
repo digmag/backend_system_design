@@ -33,12 +33,12 @@ public class MetricAspect {
                 .resolveReference(RequestAttributes.REFERENCE_REQUEST);
 
         if (request != null) {
-            String traceId = request.getHeader("X-Trace-Id");
+            String traceId = "X-Trace-Id";
             String requestUri = request.getRequestURI();
             String method = request.getMethod();
             var startTime = LocalDateTime.now();
 
-            sendMetric(traceId, requestUri, method, startTime, null, 0);
+            sendMetric(traceId, requestUri, method, startTime, startTime, 0);
 
             RequestContextHolder.currentRequestAttributes().setAttribute("startTime", startTime, RequestAttributes.SCOPE_REQUEST);
         }
@@ -51,7 +51,7 @@ public class MetricAspect {
                 .resolveReference(RequestAttributes.REFERENCE_REQUEST);
 
         if (request != null) {
-            String traceId = request.getHeader("X-Trace-Id");
+            String traceId = "X-Trace-Id";
             String requestUri = request.getRequestURI();
             String method = request.getMethod();
             int responseStatus = 200;
