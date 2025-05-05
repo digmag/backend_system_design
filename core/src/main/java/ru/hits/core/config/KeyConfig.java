@@ -1,9 +1,11 @@
 package ru.hits.core.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import jakarta.servlet.*;
+import org.springframework.http.HttpStatus;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 
@@ -23,7 +25,7 @@ public class KeyConfig implements Filter {
             FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-
+        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         String path = httpRequest.getServletPath();
         String ikHeader = httpRequest.getHeader("ik");
         UUID iKey = null;
@@ -32,6 +34,20 @@ public class KeyConfig implements Filter {
         if (ikHeader != null && !ikHeader.isBlank() && httpRequest.getMethod()=="POST") {
             try {
                 iKey = UUID.fromString(ikHeader);
+                if(path.contains("/topup")
+                        ||path.contains("/topdown")
+                        ||path.contains("/transaction/")){
+                    if(transactionRepository.existsById(iKey)){
+                        httpResponse.setStatus(200);
+                        return;
+                    }
+                }
+                if(path.contains("/credit")){
+                    if(billRepository.existsById(iKey)){
+                        httpResponse.setStatus(200);
+                        return;
+                    }
+                }
                 System.out.println("Получен ключ ik: " + iKey);
             } catch (IllegalArgumentException e) {
                 System.out.println("Неверный формат UUID для ik: " + ikHeader);

@@ -29,10 +29,12 @@ public class IntegrationController {
     }
 
     @PostMapping("/credit/{userId}/create/{id}")
-    public BillResponseDTO createCreditBill(@RequestBody CreditBillCreateDTO billCreateDTO,
-                                     @PathVariable(name = "id") UUID id,
-                                     @PathVariable(name = "userId") UUID userId,
-                                            @RequestHeader(required = false) UUID ik){
+    public BillResponseDTO createCreditBill(
+            @RequestBody CreditBillCreateDTO billCreateDTO,
+            @PathVariable(name = "id") UUID id,
+            @PathVariable(name = "userId") UUID userId,
+            @RequestHeader(required = false) UUID ik)
+    {
         return billService.createCreditBill(id, billCreateDTO, userId, ik);
     }
 
