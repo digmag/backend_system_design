@@ -12,6 +12,7 @@ import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
 import ru.hits.core.entity.TransactionEntity;
+import ru.hits.core.feignClient.NotificationClient;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IBillService;
@@ -27,6 +28,7 @@ public class BillService implements IBillService {
     private final TransactionRepository transactionRepository;
     private final IIntegrationBillService integrationBillService;
     private final WsService wsService;
+    private final NotificationClient notificationClient;
 
     @Transactional
     @Override
@@ -42,6 +44,7 @@ public class BillService implements IBillService {
                 billCreateDTO.getName()
         );
         billRepository.save(bill);
+        notificationClient.sendNotification(user.getId());
         return new BillResponseDTO(
                 bill.getId(),
                 user.getId(),
@@ -66,6 +69,7 @@ public class BillService implements IBillService {
         }
         bill.setStatus(Status.CLOSED);
         billRepository.save(bill);
+        notificationClient.sendNotification(user.getId());
     }
 
     @Transactional
@@ -100,6 +104,7 @@ public class BillService implements IBillService {
                 transactionEntity.getAmount()
         );
         wsService.sendMessage(bill.getUserId(), null, transacttt);
+        notificationClient.sendNotification(((JwtUserData) authentication.getPrincipal()).getId());
         return null;
     }
 
@@ -137,6 +142,7 @@ public class BillService implements IBillService {
                 transactionEntity.getAmount()
         );
         wsService.sendMessage(null, bill.getUserId(), transacttt);
+        notificationClient.sendNotification(((JwtUserData) authentication.getPrincipal()).getId());
         return null;
     }
 
@@ -181,6 +187,7 @@ public class BillService implements IBillService {
             throw new BadRequestException("На счете недостаточно средств");
         }
         integrationBillService.transaction(from, to, transactionCreateDTO);
+        notificationClient.sendNotification(user.getId());
         return "Создано";
     }
 

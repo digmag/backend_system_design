@@ -1,5 +1,6 @@
 package ru.hits.service;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class FirebasePushService {
     private final Map<UserResponseDTO, String> usersToNotification = new HashMap<>();
     private final UserClient userClient;
+    private final FirebaseApp firebaseApp;
     @Transactional
     @SneakyThrows
     public void registrationUser(String token, UUID userId) {
@@ -54,7 +56,7 @@ public class FirebasePushService {
                         .setNotification(notificationUser)
                         .build();
                 try {
-                    FirebaseMessaging.getInstance().send(message);
+                    FirebaseMessaging.getInstance(firebaseApp).send(message);
                 } catch (FirebaseMessagingException e) {
                     throw new ForbiddenException("Не удалось отправить сообщение");
                 }
