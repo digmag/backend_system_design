@@ -148,7 +148,7 @@ public class IntegrationBillService implements IIntegrationBillService {
         var bFrom = billRepository.findById(from).orElse(null);
         var bTo = billRepository.findById(to).orElse(null);
         TransactionEntity transaction = new TransactionEntity(
-                UUID.randomUUID(),
+                ik,
                 bFrom,
                 bTo,
                 transactionCreateDTO.getAmount()

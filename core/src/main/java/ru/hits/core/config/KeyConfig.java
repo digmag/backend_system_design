@@ -27,8 +27,9 @@ public class KeyConfig implements Filter {
         String path = httpRequest.getServletPath();
         String ikHeader = httpRequest.getHeader("ik");
         UUID iKey = null;
+        System.out.println(httpRequest.getMethod());
 
-        if (ikHeader != null && !ikHeader.isBlank()) {
+        if (ikHeader != null && !ikHeader.isBlank() && httpRequest.getMethod()=="POST") {
             try {
                 iKey = UUID.fromString(ikHeader);
                 System.out.println("Получен ключ ik: " + iKey);
@@ -36,11 +37,7 @@ public class KeyConfig implements Filter {
                 System.out.println("Неверный формат UUID для ik: " + ikHeader);
                 throw new ServletException("Некорректный UUID в заголовке 'ik'", e);
             }
-        } else {
-            System.out.println("Заголовок ik отсутствует или пуст");
         }
-
-        System.out.println("Путь запроса: " + path);
 
         System.out.println(httpRequest.getServletPath());
         filterChain.doFilter(servletRequest, servletResponse);

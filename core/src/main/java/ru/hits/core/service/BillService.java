@@ -34,7 +34,7 @@ public class BillService implements IBillService {
         JwtUserData user = (JwtUserData) authentication.getPrincipal();
 
         BillEntity bill = new BillEntity(
-                UUID.randomUUID(),
+                ik,
                 user.getId(),
                 0.0,
                 billCreateDTO.getType(),
@@ -92,7 +92,7 @@ public class BillService implements IBillService {
         }
         bill.setAmount(bill.getAmount() + transactionCreateDTO.getAmount());
         billRepository.save(bill);
-        TransactionEntity transactionEntity = createTransaction(null, bill, transactionCreateDTO.getAmount());
+        TransactionEntity transactionEntity = createTransaction(null, bill, transactionCreateDTO.getAmount(), ik);
         var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
                 null,
@@ -129,7 +129,7 @@ public class BillService implements IBillService {
         }
         bill.setAmount(bill.getAmount() - transactionCreateDTO.getAmount());
         billRepository.save(bill);
-        TransactionEntity transactionEntity = createTransaction(bill, null, transactionCreateDTO.getAmount());
+        TransactionEntity transactionEntity = createTransaction(bill, null, transactionCreateDTO.getAmount(), ik);
         var transacttt = new TransactionResponseDTO(
                 transactionEntity.getId(),
                 billTo,
@@ -195,9 +195,9 @@ public class BillService implements IBillService {
         
     }
 
-    private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Double amount){
+    private TransactionEntity createTransaction(BillEntity billFrom, BillEntity billTo, Double amount, UUID ik){
         TransactionEntity transaction = new TransactionEntity(
-                UUID.randomUUID(),
+                ik,
                 billFrom,
                 billTo,
                 amount);

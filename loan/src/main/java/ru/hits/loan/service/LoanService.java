@@ -22,7 +22,7 @@ public class LoanService implements ILoanService {
     @Transactional
     public LoanResponseDTO create(LoanCreateDTO loanCreateDTO, UUID ik) {
         LoanEntity loan = new LoanEntity(
-                UUID.randomUUID(),
+                ik,
                 loanCreateDTO.getLoanName(),
                 loanCreateDTO.getPercent(),
                 true
