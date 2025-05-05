@@ -13,6 +13,7 @@ import ru.hits.common.security.exception.ForbiddenException;
 import ru.hits.common.security.exception.NotFoundException;
 import ru.hits.core.entity.BillEntity;
 import ru.hits.core.entity.TransactionEntity;
+import ru.hits.core.feignClient.NotificationClient;
 import ru.hits.core.repository.BillRepository;
 import ru.hits.core.repository.TransactionRepository;
 import ru.hits.core.service.interfaces.IIntegrationBillService;
@@ -26,6 +27,7 @@ public class IntegrationBillService implements IIntegrationBillService {
     private final BillRepository billRepository;
     private final TransactionRepository transactionRepository;
     private final WsService wsService;
+    private final NotificationClient notificationClient;
     @Override
     public List<BillResponseDTO> getUsersBills(UUID userId) {
         var bills = billRepository.findAllByUserId(userId);
@@ -97,6 +99,7 @@ public class IntegrationBillService implements IIntegrationBillService {
             throw new NotFoundException("Счвета не существует");
         }
         bill.setStatus(Status.BLOCKED);
+        notificationClient.sendNotification(bill.getUserId());
         billRepository.save(bill);
     }
 
@@ -130,7 +133,7 @@ public class IntegrationBillService implements IIntegrationBillService {
         );
 
         billRepository.save(creditBill);
-
+        notificationClient.sendNotification(userId);
         return new BillResponseDTO(
                 creditBill.getId(),
                 creditBill.getUserId(),
@@ -183,6 +186,8 @@ public class IntegrationBillService implements IIntegrationBillService {
         billRepository.save(bFrom);
         billRepository.save(bTo);
         transactionRepository.save(transaction);
+        notificationClient.sendNotification(from);
+        notificationClient.sendNotification(to);
     }
 
     @Override
