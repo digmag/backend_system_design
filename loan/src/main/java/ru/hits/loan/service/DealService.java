@@ -61,7 +61,7 @@ public class DealService implements IDealService {
             );
             billCreateDTO.setAmount(dealEntity.getSum());
             dealRepository.save(dealEntity);
-            return billClient.createCreditBill(billCreateDTO, dealEntity.getId(), user.getId());
+            return billClient.createCreditBill(billCreateDTO, dealEntity.getId(), user.getId(), ik);
 
     }
 

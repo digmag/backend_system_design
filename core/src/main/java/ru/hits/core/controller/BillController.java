@@ -22,22 +22,24 @@ public class BillController {
     private final IIntegrationBillService iBillService;
 
     @PostMapping("/create")
-    public BillResponseDTO create(@RequestBody BillCreateDTO billCreateDTO, Authentication authentication, UUID ik){
+    public BillResponseDTO create(@RequestBody BillCreateDTO billCreateDTO, Authentication authentication, @RequestHeader(required = false) UUID ik){
         return billService.create(billCreateDTO, authentication, ik);
     }
 
     @PostMapping("/{id}/topup")
     public TransactionResponseDTO topUp(@PathVariable UUID id,
                                         @RequestBody TransactionCreateDTO transactionCreateDTO,
-                                        Authentication authentication){
-        return billService.topUp(id, transactionCreateDTO, authentication);
+                                        Authentication authentication,
+                                        @RequestHeader(required = false) UUID ik){
+        return billService.topUp(id, transactionCreateDTO, authentication, ik);
     }
 
     @PostMapping("/{id}/topdown")
     public TransactionResponseDTO topdown(@PathVariable UUID id,
                                         @RequestBody TransactionCreateDTO transactionCreateDTO,
-                                        Authentication authentication){
-        return billService.topDown(id, transactionCreateDTO, authentication);
+                                        Authentication authentication,
+                                          @RequestHeader(required = false) UUID ik){
+        return billService.topDown(id, transactionCreateDTO, authentication, ik);
     }
 
     @GetMapping("/my")
@@ -49,13 +51,14 @@ public class BillController {
     public String transaction(@PathVariable UUID from,
                                           @PathVariable UUID to,
                                           @RequestBody TransactionCreateDTO transactionCreateDTO,
-                                          Authentication authentication){
-        return billService.transaction(from,to, transactionCreateDTO, authentication);
+                                          Authentication authentication,
+                              @RequestHeader(required = false) UUID ik){
+        return billService.transaction(from,to, transactionCreateDTO, authentication, ik);
     }
 
     @PatchMapping("/{id}/close")
-    public void close(@PathVariable UUID id, Authentication authentication){
-        billService.closeBill(id, authentication);
+    public void close(@PathVariable UUID id, Authentication authentication, @RequestHeader(required = false) UUID ik){
+        billService.closeBill(id, authentication, ik);
     }
 
     @GetMapping("/transactions/{billId}")
@@ -64,7 +67,7 @@ public class BillController {
     }
 
     @PutMapping("/credit/{id}/close")
-    public void closeBillInOneTap(@PathVariable UUID id){
-        billService.closeBillInOneTap(id);
+    public void closeBillInOneTap(@PathVariable UUID id, @RequestHeader(required = false) UUID ik){
+        billService.closeBillInOneTap(id, ik);
     }
 }

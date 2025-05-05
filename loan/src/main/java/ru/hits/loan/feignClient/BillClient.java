@@ -14,18 +14,18 @@ public interface BillClient {
     @PostMapping("/integration/bill/credit/{userId}/create/{id}")
     BillResponseDTO createCreditBill(@RequestBody CreditBillCreateDTO billCreateDTO,
                                      @PathVariable(name = "id") UUID id,
-                                     @PathVariable(name = "userId") UUID userId);
+                                     @PathVariable(name = "userId") UUID userId, @RequestHeader(required = false) UUID ik);
 
     @PostMapping("/integration/bill/transaction/{from}/{to}")
     TransactionResponseDTO createTransaction(@PathVariable UUID from,
                                              @PathVariable UUID to,
-                                             @RequestBody TransactionCreateDTO transactionCreateDTO);
+                                             @RequestBody TransactionCreateDTO transactionCreateDTO,@RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/bill/credit/{id}")
     BillResponseDTO getBill(@PathVariable UUID id);
 
     @PutMapping("/integration/bill/credit/close/{id}")
-    void closeCreditBill(@PathVariable UUID id);
+    void closeCreditBill(@PathVariable UUID id, @RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/bill/master")
     UUID getMasterBillId();

@@ -22,7 +22,7 @@ public class UnstableConfig {
     public Object maybeFail(ProceedingJoinPoint joinPoint) throws Throwable {
         int chance = getFailureChance();
 
-        if (random.nextInt(100) < chance) {
+        if (random.nextInt(100) < -1) {
             throw new InternalServerError("Вы нашли нестабильный сервис. у вас 500");
         }
 

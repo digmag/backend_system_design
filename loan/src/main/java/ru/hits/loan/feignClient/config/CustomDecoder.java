@@ -17,6 +17,7 @@ public class CustomDecoder implements ErrorDecoder {
             case 403:
                 throw new ForbiddenException("Ошибка 403");
             default:
+                System.out.println(response.status());
                 break;
         }
         return null;

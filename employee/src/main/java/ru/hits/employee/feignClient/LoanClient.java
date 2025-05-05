@@ -14,10 +14,10 @@ public interface LoanClient {
     LoanResponseDTO getOne(@PathVariable UUID id);
 
     @PostMapping("/integration/loan/create")
-    LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO);
+    LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO, @RequestHeader(required = false) UUID ik);
 
     @DeleteMapping("/integration/loan/{id}")
-    void delete(@PathVariable UUID id);
+    void delete(@PathVariable UUID id, @RequestHeader(required = false) UUID ik);
 
     @GetMapping("/integration/loan")
     List<LoanResponseDTO> allLoans();

@@ -78,8 +78,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/loan/create")
-    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO){
-        return loanClient.create(loanCreateDTO);
+    public LoanResponseDTO create(@RequestBody LoanCreateDTO loanCreateDTO, @RequestHeader(required = false) UUID ik){
+        return loanClient.create(loanCreateDTO, ik);
     }
 
     @GetMapping("/loan")
@@ -93,8 +93,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/loan/{id}")
-    public void delete(@PathVariable UUID id){
-        loanClient.delete(id);
+    public void delete(@PathVariable UUID id, @RequestHeader(required = false) UUID ik){
+        loanClient.delete(id, ik);
     }
 
 }

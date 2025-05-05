@@ -54,7 +54,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
-    public void closeBill(UUID id, Authentication authentication) {
+    public void closeBill(UUID id, Authentication authentication, UUID ik) {
         var user = (JwtUserData) authentication.getPrincipal();
 
         BillEntity bill = billRepository.findById(id).orElse(null);
@@ -71,7 +71,7 @@ public class BillService implements IBillService {
     @Transactional
     @Override
     @SneakyThrows
-    public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
+    public TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication, UUID ik) {
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -105,7 +105,7 @@ public class BillService implements IBillService {
 
     @SneakyThrows
     @Override
-    public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication) {
+    public TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication, UUID ik) {
         var bill = billRepository.findById(id).orElse(null);
         if(bill == null){
             throw new BadRequestException("Счета не существует");
@@ -160,7 +160,8 @@ public class BillService implements IBillService {
     public String transaction(UUID from,
                                               UUID to,
                                               TransactionCreateDTO transactionCreateDTO,
-                                              Authentication authentication) {
+                                              Authentication authentication,
+                              UUID ik) {
         var user = (JwtUserData) authentication.getPrincipal();
         BillEntity billFrom = billRepository.findById(from).orElse(null);
         BillEntity billTo = billRepository.findById(to).orElse(null);
@@ -180,7 +181,7 @@ public class BillService implements IBillService {
         if(billFrom.getAmount()<transactionCreateDTO.getAmount()){
             throw new BadRequestException("На счете недостаточно средств");
         }
-        integrationBillService.transaction(from, to, transactionCreateDTO);
+        integrationBillService.transaction(from, to, transactionCreateDTO, ik);
         return "Создано";
     }
 
@@ -190,7 +191,7 @@ public class BillService implements IBillService {
     }
 
     @Override
-    public void closeBillInOneTap(UUID id) {
+    public void closeBillInOneTap(UUID id, UUID ik) {
         
     }
 

@@ -13,15 +13,16 @@ import java.util.UUID;
 @Service
 public interface IBillService {
     BillResponseDTO create(BillCreateDTO billCreateDTO, Authentication authentication, UUID ik);
-    void closeBill(UUID id, Authentication authentication);
+    void closeBill(UUID id, Authentication authentication, UUID ik);
 
-    TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication);
-    TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication);
+    TransactionResponseDTO topUp(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication, UUID ik);
+    TransactionResponseDTO topDown(UUID id, TransactionCreateDTO transactionCreateDTO, Authentication authentication, UUID ik);
     List<BillResponseDTO> getMyBills(Authentication authentication);
     String transaction(UUID from,
                                        UUID to,
                                        TransactionCreateDTO transactionCreateDTO,
-                                       Authentication authentication);
+                                       Authentication authentication,
+                       UUID ik);
     List<TransactionResponseDTO> transactions(UUID id);
-    void closeBillInOneTap(UUID id);
+    void closeBillInOneTap(UUID id, UUID ik);
 }
