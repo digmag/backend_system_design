@@ -18,7 +18,6 @@ import java.util.UUID;
 @Table(name = "metric")
 public class MetricEntity {
     @Id
-    @GeneratedValue
     private UUID id;
 
     @Column(name = "trace_id", nullable = false)
