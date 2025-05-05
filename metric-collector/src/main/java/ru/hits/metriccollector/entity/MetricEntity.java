@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "metrics")
+@Table(name = "metric")
 public class MetricEntity {
     @Id
     @GeneratedValue
