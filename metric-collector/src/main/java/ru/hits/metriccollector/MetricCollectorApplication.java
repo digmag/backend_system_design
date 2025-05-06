@@ -1,0 +1,20 @@
+package ru.hits.metriccollector;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Import;
+import ru.hits.common.security.SecurityConfig;
+import ru.hits.common.security.exception.GlobalExceptionHandler;
+import ru.hits.common.security.props.SecurityIntegrationProps;
+
+@SpringBootApplication(exclude = {org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration.class})
+@ConfigurationPropertiesScan("ru.hits")
+@Import({GlobalExceptionHandler.class, SecurityConfig.class, SecurityIntegrationProps.class})
+@EnableFeignClients
+public class MetricCollectorApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MetricCollectorApplication.class, args);
+    }
+}

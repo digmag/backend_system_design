@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    hostname: metabase
+    volumes:
+      - /dev/urandom:/dev/random:ro
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: monitoring
+      MB_DB_PORT: 15432
+      MB_DB_USER: admin
+      MB_DB_PASS: root
+      MB_DB_HOST: 185.103.70.190
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
