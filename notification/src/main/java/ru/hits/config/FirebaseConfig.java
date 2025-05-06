@@ -20,7 +20,7 @@ public class FirebaseConfig {
     @SneakyThrows
     public FirebaseConfig(){
         InputStream serviceAccount =
-                new ClassPathResource("test-b5a4e-firebase-adminsdk-fbsvc-75c18291ef.json").getInputStream();
+                new ClassPathResource("test-b5a4e-firebase-adminsdk-fbsvc-791500452d.json").getInputStream();
         firebaseOptions = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();

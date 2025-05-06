@@ -3,7 +3,7 @@ import { SSOFormProps } from "../hook"
 import { Apps, AppsCreate, Token } from "./types"
 const ssoLocalhost = "localhost"
 const ssoIp = "185.103.70.190"
-const ssoURL = `http://${ssoLocalhost}:8080`
+const ssoURL = `http://${ssoIp}:8080`
 
 export const ssoApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: ssoURL}),
