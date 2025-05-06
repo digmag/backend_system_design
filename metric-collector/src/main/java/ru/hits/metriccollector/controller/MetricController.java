@@ -17,14 +17,14 @@ import java.util.List;
 public class MetricController {
     private final MetricCollectorService metricCollectorService;
 
-    // Добавление новой метрики
+
     @PostMapping
     public ResponseEntity<Void> createMetric(@RequestBody @Valid MetricCreateDto metricCreateDto) {
         metricCollectorService.saveMetric(metricCreateDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // Получение всех метрик
+
     @GetMapping
     public ResponseEntity<List<MetricEntity>> getAllMetrics() {
         List<MetricEntity> metrics = metricCollectorService.getAllMetrics();
